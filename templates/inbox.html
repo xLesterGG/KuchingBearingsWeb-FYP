@@ -1,0 +1,22 @@
+<div>
+  <div class="container" data-ng-controller="chatCtrl" >
+
+    <div class="row" data-ng-init="joinServer('testing')">
+
+      <div class="col-md-3">
+        <h1> List of chats </h1>
+
+
+        <ul>
+           <li data-ng-repeat="room in allRoomList track by $index">
+                <a data-ui-sref="inbox.chat({id: room.roomID})">  {{room.roomName}}           ( {{room.roomID}} ) </a>
+            </li>
+        </ul>
+
+      </div>
+
+      <div data-ui-view class="col-md-6"></div>
+
+    </div>
+  </div>
+</div>

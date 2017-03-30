@@ -1,0 +1,25 @@
+<div>
+  <div class="container" data-ng-controller="chatCtrl" data-ng-init="joinServer('testing')">
+
+    <h1>Chat Page Update</h1>
+{{chatID}}
+      <div class="row" data-ng-init="autojoinRoom()">
+              <ul>
+                  <li data-ng-repeat="msg in messages| filter: filterR  track by $index ">
+                      {{msg.msg}}
+                  </li>
+              </ul>
+
+              <div class="col-md-4 form-group">
+
+                <label for="message">Message</label>
+                <input type="text" data-ng-model="inputMessage" class="form-control" id="message" />
+                <br>
+                <button type="button" data-ng-click="sendMessage2()" class="btn btn-primary btn-md">Send</button>
+              </div>
+      </div>
+    </div>
+
+
+
+</div>

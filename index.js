@@ -26,11 +26,18 @@ app.use('/js', express.static(__dirname + '/node_modules/angular'));
 app.use('/js', express.static(__dirname + '/assets'));
 app.use('/socket.io',express.static(__dirname+'/node_modules/socket.io-client/dist'));
 app.use('/js',express.static(__dirname + '/node_modules/firebase'));
+app.use('/templates', express.static(__dirname + '/templates')); //template html
+app.use('/js',express.static(__dirname + '/node_modules/angular-ui-router/release')); // redirect angular-ui-router
 
 
 app.get('/',(req,res)=>{
     // res.send('hello');
     res.sendFile(__dirname +'/index.html');
+});
+
+app.get('/home',(req,res)=>{
+    // res.send('hello');
+    res.sendFile(__dirname +'/home.html');
 });
 
 server.listen(3000,"localhost");

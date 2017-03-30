@@ -1,0 +1,43 @@
+<html lang="en" data-ng-app="myApp">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+        <script src="/socket.io/socket.io.js"></script>
+
+    </head>
+    <body>
+        <div class="container">
+            <h1>Home Page Testing</h1>
+          <div class="container slide" style="padding-top= 80;">
+            <div class="row">
+
+              <div class="col-md-3">
+                <div class="pa-sidebar well well-small">
+                  <ul class="nav nav-list">
+                    <li class="nav-header"><a data-ui-sref="admin"> Admin </a></li>
+
+                    <li class="nav-header"><a data-ui-sref="inbox"> Inbox </a>
+                      <a data-ui-sref="inbox.Read"> Read </a>
+                      <a data-ui-sref="inbox.Unread"> Unread </a>
+                      <a data-ui-sref="inbox.Paid"> Paid </a>
+                    </li>
+
+                    <li class="nav-header"><a data-ui-sref="history"> History </a></li>
+
+                  </ul>
+                </div>
+              </div>
+
+              <div ui-view class="col-md-9"></div>
+
+            </div>
+          </div>
+        </div>
+
+        <script src="/js/jquery.js"></script>
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/angular.js"></script>
+        <script src="/js/angular-ui-router.js"></script>
+        <script src="/js/controller.js"></script>
+    </body>
+</html>
