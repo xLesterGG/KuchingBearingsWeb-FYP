@@ -1,11 +1,11 @@
 <div>
-  <div class="container" data-ng-controller="chatCtrl" data-ng-init="joinServer('testing')">
+  <div class="container" data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter()" >
 
     <h1>Chat Page Update</h1>
 {{chatID}}
       <div class="row" data-ng-init="autojoinRoom()">
               <ul>
-                  <li data-ng-repeat="msg in messages| filter: filterR  track by $index ">
+                  <li data-ng-repeat="msg in messages| filter: filterR track by $index ">
                       {{msg.msg}}
                   </li>
               </ul>
