@@ -173,6 +173,7 @@ app.controller("chatBoxCtrl",($scope,$stateParams)=>{
             toSend.dest = $scope.chatID;
             toSend.mess = $scope.inputMessage;
             socket.emit("sendMessage",toSend);
+            $scope.inputMessage = '';
         }
     };
 
