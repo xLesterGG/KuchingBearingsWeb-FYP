@@ -54,21 +54,20 @@ server.listen(3000,"localhost");
 var socket = io.listen(server);
 
 var people = {};
-var rooms = {};
-var chats = {};
+var inquiries = {};
+var conversations = {};
+
 
 var ready = false;
 var a = database.ref('/inquiries'); // get changes to rooms
 a.on('value',function(res){
+    console.log('loaded / new inquiry');
     for(var r in res.val()){
-         rooms[r] = res.val()[r];
-        //   console.log(rooms[r]);
+         inquiries[r] = res.val()[r];
     }
 
-    // console.log(rooms);
-
     ready = true;
-    socket.sockets.emit("updateRoomList",rooms);
+    // socket.sockets.emit("updateRoomList",rooms);
 });
 
 
@@ -76,6 +75,87 @@ a.on('value',function(res){
 
 var isReady = false;
 
+database.ref('/conversations').once('value').then((res)=>{ // retrieve once client is connected
+    // console.log(res.val());
+    console.log('get once');
+    if(res.val() != null ){
+        for(var key in res.val()){
+            conversations[key] = res.val()[key];
+            // console.log(chats[key]);
+        }
+        console.log(conversations);
+        isReady = true;
+    }
+    else{
+        //something to say no enquiries yet
+        isReady = true;
+    }
+});
+
+var b = database.ref('/conversations');
+b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message)
+    if(isReady){
+        // console.log(res.val())
+        for(var key in res.val())
+        {
+            if(conversations[key] == undefined)
+            {
+                console.log('child added');
+                // console.log(res.val().messages[0].roomID);
+                conversations[key] = res.val()[key];
+            }
+            console.log(conversations);
+            console.log(conversations[key]);
+        }
+
+    }
+});
+
+var c = database.ref('/conversations');
+c.on('child_changed',(res)=>{
+
+    var l = Object.keys(conversations).length;
+    var c = 0;
+
+    // console.log(res.val());
+
+    var x = res.val();
+
+    console.log(res.key);
+    // for(var y in x){
+    //     console.log(y);
+    // }
+
+    for(var key in res.val()){
+        // console.log('new message');
+        // console.log(key);
+        // c++;
+        // if(c == l){
+        //     conversations[key].push(res.val()[key]);
+        //     console.log(res.val()[key]);
+        //     console.log(conversations[key]);
+        // }
+           //     socket.to(res.val().messages[0].roomID).emit("sendMessage",res.val().messages[k]);
+
+        // console.log(conversations[key]);
+        // console.log(res.val());
+        //
+        // for(var k in res.val()[key]){
+        //
+        //
+        //     }
+        // }
+
+
+        // for(var k = l; k<res.val()[key].length; k++){
+        //
+        //
+        //     chats[key].push(res.val()[key][k]);
+        //     socket.to(res.val().messages[0].roomID).emit("sendMessage",res.val().messages[k]);
+        // }
+    }
+
+});
 
 socket.on("connection",(client)=>{
     client.joinedRooms = [];
@@ -85,69 +165,9 @@ socket.on("connection",(client)=>{
 
         console.log(name);
 
-        database.ref('/conversations').once('value').then((res)=>{ // retrieve once client is connected
-            // console.log(res.val());
-            console.log('once');
-            if(res.val() != null ){
-                for(var key in res.val()){
-                    chats[key] = res.val()[key];
-
-                    // console.log(chats[key]);
-                }
-                isReady = true;
-            }
-            else{
-                //something to say no enquiries yet
-                isReady = true;
-            }
-        });
-
-
-        var b = database.ref('/conversations');
-        b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message)
-            if(isReady){
-                console.log(res.val())
-                for(var key in res.val())
-                {
-                    if(chats[key] == undefined)
-                    {
-                        // console.log('child added');
-                        // console.log(res.val().messages[0].roomID);
-                        chats[key] = res.val()[key];
-                    }
-                }
-
-            }
-        });
-
-
-        var c = database.ref('/conversations/');
-        c.on('child_changed',(res)=>{
-
-            for(var key in res.val()){
-                console.log('one child changed')
-                var l = chats[key].length;
-
-                var c = 0;
-                for(var k in res.val()[key]){
-                    c++;
 
 
 
-
-                }
-                // for(var k = l; k<res.val()[key].length; k++){
-                //
-                //
-                //     chats[key].push(res.val()[key][k]);
-                //     socket.to(res.val().messages[0].roomID).emit("sendMessage",res.val().messages[k]);
-                // }
-            }
-
-
-
-
-        });
         //
         //
         //
