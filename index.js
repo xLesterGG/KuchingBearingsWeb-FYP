@@ -67,10 +67,10 @@ a.on('value',function(res){
     }
 
     ready = true;
-    // socket.sockets.emit("updateRoomList",rooms);
+    socket.sockets.emit("updateInquiryList",inquiries);
 });
 
-
+var c = database.ref('/conversations/'); // to receive incoming messages and update view
 
 
 var isReady = false;
@@ -80,11 +80,9 @@ socket.on("connection",(client)=>{
     client.ownedRooms = [];
 
     client.on("join",(name)=>{
-
-        // console.log(name);
+        console.log('joined');
 
         database.ref('/conversations').once('value').then((res)=>{ // retrieve once client is connected
-            // console.log(res.val());
             console.log('get once');
             if(res.val() != null ){
                 for(var key in res.val()){
@@ -100,14 +98,15 @@ socket.on("connection",(client)=>{
         });
 
         var b = database.ref('/conversations');
-        b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message)
+        b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message), create new entry in associative array
+            console.log('child added')
             if(isReady){
                 // console.log(res.val())
                 for(var key in res.val())
                 {
                     if(conversations[key] == undefined)
                     {
-                        console.log('child added');
+                        // console.log('child added');
                         conversations[key] = res.val()[key];
                     }
                 }
@@ -115,26 +114,26 @@ socket.on("connection",(client)=>{
             }
         });
 
-        var c = database.ref('/conversations');
         c.on('child_changed',(res)=>{
-
-            var l = Object.keys(conversations[res.key]).length;
-
-            // console.log('length is ' + l );
-            var c = 0;
-
-            for(var key in res.val()){
-                c++;
-                if(c > l){
-                    conversations[res.key][key] = (res.val()[key]);
-                    console.log(conversations[res.key]);
-                    // console.log(res.val()[key].messageText);
-                }
-                    //    socket.to(res.val().messages[0].roomID).emit("sendMessage",res.val().messages[k]);
-
-            }
+            console.log('child changed')
+            // var l = Object.keys(conversations[res.key]).length;
+            // var c = 0;
+            //
+            // for(var key in res.val()){
+            //     c++;
+            //     if(c > l){
+            //         console.log('new message')
+            //         conversations[res.key][key] = (res.val()[key]);
+            //         var temp = res.val()[key];
+            //         temp.inquiryID = res.key
+            //         // client.emit("sendMessage",temp)
+            //     }
+            //         //    socket.to(res.val().messages[0].roomID).emit("sendMessage",res.val().messages[k]);
+            // }
 
         });
+
+
 
         // var joinedRooms = [];  // list of room ids
         // var ownedRooms = []; // list of room ids
@@ -142,35 +141,35 @@ socket.on("connection",(client)=>{
         // people[client.id] = {"name" : name, "joinedRooms": joinedRooms, "ownedRooms": ownedRooms};   //create new people object
         // client.emit("systemMessage", "You (" + name + ") have connected to the server"); // alert
 
-        var message;
-        if(ready){
-            if(Object.keys(inquiries).length == 0 ){
-                message= "There are currently no inquiries";
-            }else{
-                // var msg = "The available inquiries are ";
-
-                // var aR = [];
-                // for(var key in inquiries){
-                //     aR.push(inquiries[key]);
-                // }
-
-                // for(var i = 0 ; i < aR.length;i++){
-                //     if(i==0){
-                //         msg = msg + aR[i].inquiryName ;
-                //     }
-                //     else if(i == rooms.length -1){
-                //         msg = msg + "," +aR[i].inquiryName + "." ;
-                //     }
-                //     else{
-                //         msg = msg + ","+ aR[i].inquiryName ;
-                //     }
-                // }
-                //
-                // message  = msg;
-            }
-            // client.emit("listRoom",message); // list available rooms
-            // socket.sockets.emit("updateRoomList",conversations);
-        }
+        // var message;
+        // if(ready){
+        //     if(Object.keys(inquiries).length == 0 ){
+        //         message= "There are currently no inquiries";
+        //     }else{
+        //         var msg = "The available inquiries are ";
+        //
+        //         var aR = [];
+        //         for(var key in inquiries){
+        //             aR.push(inquiries[key]);
+        //         }
+        //
+        //         for(var i = 0 ; i < aR.length;i++){
+        //             if(i==0){
+        //                 msg = msg + aR[i].inquiryName ;
+        //             }
+        //             else if(i == rooms.length -1){
+        //                 msg = msg + "," +aR[i].inquiryName + "." ;
+        //             }
+        //             else{
+        //                 msg = msg + ","+ aR[i].inquiryName ;
+        //             }
+        //         }
+        //
+        //         message  = msg;
+        //     }
+        //     client.emit("listRoom",message); // list available rooms
+        //     socket.sockets.emit("updateRoomList",conversations);
+        // }
 
     });
 
@@ -228,25 +227,30 @@ socket.on("connection",(client)=>{
 
     client.on("joinRoom", (id)=>{
         var inq = inquiries[id];
-
         if(inq != undefined){
-            if('admin' === room.roomOwner){
+            console.log('defined');
+
+            if('admin' === inq.inquiryOwner){
                 // client.emit("systemMessage","You are the owner of this room and you have already been joined.");
             }else{
+
                 var found = false;
                 for(var i=0;i<inq.inquiryPeoples.length;i++){
-                    if(room.inquiryPeoples[i] == 'admin'){
+                    if(inq.inquiryPeoples[i] == 'admin'){
                         found = true;
                         break;
                     }
                 }
 
-
                 if(found){
+
                     // client.emit("systemMessage", "You have already joined this room.");
                 }else{
                     // room.addPerson(client.id);
                     // room.inquiryPeoples.push(client.id);
+
+                    inq.inquiryPeoples.push('admin');
+                    console.log(inq.inquiryPeoples);
 
                     var data = {
                         inquiryPeoples: inq.inquiryPeoples,
@@ -291,6 +295,7 @@ socket.on("connection",(client)=>{
                 }
             }
         }else{
+            // console.log('elese undefined');
             // alert('Error: Room might not exist, please refresh!');
             // var queryHandler = require('special_query_handler');
             // app.get('/');
@@ -303,20 +308,19 @@ socket.on("connection",(client)=>{
 
 
     client.on("sendMessage",(message)=>{ // message, room id,
-        var inq = inquiries[message.dest];
+        var inq = inquiries[message.dest]; // inquiry id
 
         if(inq== null){
             // do something
             console.log('null');
         }else{
             var found = false;
-            for(i=0;i<room.peoples.length;i++){
-                if(room.peoples[i] === 'admin'){
+            for(i=0;i<inq.inquiryPeoples.length;i++){
+                if(inq.inquiryPeoples[i] === 'admin'){ // check if in room
 
                     var msg = {};
                     // msg.msg =  people[client.id].name + ": " +message.mess;
                     msg.msg = 'admin: ' +message.mess;
-
                     // msg.inquiryID = inq.inquiryID;
                     msg.sender = 'admin';
 
@@ -325,26 +329,26 @@ socket.on("connection",(client)=>{
                         // var a = [];
                         // a.push(msg);
 
-                        database.ref('/conversations/'+room.roomID).set({
+                        database.ref('/conversations/'+inq.inquiryID).push({
                             messageText: msg.msg,
                             messageTime : '1491267891768',
-                            messageuser = msg.sender
+                            messageuser : msg.sender
                         });
                     }
                     else{
-                        var b =  [];
-                        // console.log('SENDING');
-                        // console.log('length of ori' chats[room.roomID].length);
-                        b = JSON.parse(JSON.stringify(chats[room.roomID]));
-                        b.push(msg);
-                        // console.log(b);
-                        var data = {
-                            messages : b
-                        }
-
-                        var update = {};
-                        update['/chats/'+ room.roomID] = data;
-                        database.ref().update(update);
+                        // var b =  [];
+                        // // console.log('SENDING');
+                        // // console.log('length of ori' chats[room.roomID].length);
+                        // b = JSON.parse(JSON.stringify(chats[room.roomID]));
+                        // b.push(msg);
+                        // // console.log(b);
+                        // var data = {
+                        //     messages : b
+                        // }
+                        //
+                        // var update = {};
+                        // update['/chats/'+ room.roomID] = data;
+                        // database.ref().update(update);
                     }
 
                     // socket.to(room.id).emit("sendMessage",msg);

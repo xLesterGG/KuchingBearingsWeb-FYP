@@ -9,9 +9,9 @@
 
         <div class="list-group">
            <!-- <li data-ng-repeat="room in allRoomList track by $index" class="list-group-item list-group-item-action"> -->
-                <a data-ng-repeat="room in allRoomList track by $index" class="list-group-item list-group-item-action" data-ui-sref="inbox.chat({id: room.roomID})">
+                <a data-ng-repeat="inq in allInquiryList track by $index" class="list-group-item list-group-item-action" data-ui-sref="inbox.chat({id: inq.inquiryID})">
                   <div class="d-flex w-100 justify-content-between">
-                        <p class="mb-1">{{room.roomName}}
+                        <p class="mb-1">{{inq.inquiryID}}
                         <small>3 days ago</small> </p>
                   </div>
                       <p class="mb-1">simple preview</p>

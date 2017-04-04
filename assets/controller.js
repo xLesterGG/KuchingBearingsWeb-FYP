@@ -48,15 +48,19 @@ app.controller("chatCtrl",($scope, $stateParams)=>{
 
     // $scope.required = true;
 //    console.log(chatID.length);
-    console.log(socket);
+    // console.log(socket);
     $scope.rname = '';
     $scope.inputMessage = '';
     $scope.hideSend = true;
     $scope.hideRoom = true;
     $scope.joinedRooms = [];
-    $scope.allRoomList = [];
+    $scope.allInquiryList = [];
 
     $scope.messages = [];
+
+    socket.emit("join", 'asdf');
+    $scope.hideName = true;
+    $scope.hideRoom = false;
 
 
 
@@ -68,71 +72,73 @@ app.controller("chatCtrl",($scope, $stateParams)=>{
         $scope.hideRoom = false;
     };
 
-    $scope.createRoom = ()=>{
-        if($scope.rname==''){
-            alert('Enter room name')
-        }else{
-            socket.emit("createRoom",$scope.rname);
-            $scope.hideSend = false;
-        }
-    };
+    // $scope.createRoom = ()=>{
+    //     if($scope.rname==''){
+    //         alert('Enter room name')
+    //     }else{
+    //         socket.emit("createRoom",$scope.rname);
+    //         $scope.hideSend = false;
+    //     }
+    // };
+    //
+    //
+    //
+    // $scope.joinRoom = ()=>{
+    //     if($scope.rname==''){
+    //         alert('Enter room name');
+    //     }else{
+    //         console.log('joining');
+    //         socket.emit("joinRoom",$scope.rname);
+    //         $scope.hideSend = false;
+    //     }
+    // };
 
-
-
-    $scope.joinRoom = ()=>{
-        if($scope.rname==''){
-            alert('Enter room name');
-        }else{
-            socket.emit("joinRoom",$scope.rname);
-            $scope.hideSend = false;
-        }
-    };
-
-
-    $scope.sendMessage = ()=>{
-        if($scope.inputMessage!=''){
-            var toSend = {};
-            toSend.dest = $scope.selectedChannel;
-            toSend.mess = $scope.inputMessage;
-            socket.emit("sendMessage",toSend);
-        }
-    };
-
-    socket.on("systemMessage", (msg)=>{
-        var message = {};
-        message.msg = msg;
-        message.type = "system";
-
-        $scope.messages.push(message);
-        $scope.$apply();
-
-        console.log(message.msg);
-    });
-
-    socket.on("listRoom",(r)=>{
-        var message = {};
-        message.msg = r;
-        message.type="list"
-
-        $scope.messages.push(message);
-        $scope.$apply();
-    });
-
-    socket.on("getJoinedRooms",(joinedRooms)=>{
-        var message = {};
-        message.msg = joinedRooms.msg;
-        message.type="joined"
-
-        $scope.messages.push(message);
-        $scope.joinedRooms = joinedRooms.list;
-        $scope.$apply();
-    });
-
+    //
+    //
+    // $scope.sendMessage = ()=>{
+    //     if($scope.inputMessage!=''){
+    //         var toSend = {};
+    //         toSend.dest = $scope.selectedChannel;
+    //         toSend.mess = $scope.inputMessage;
+    //         socket.emit("sendMessage",toSend);
+    //     }
+    // };
+    //
+    // socket.on("systemMessage", (msg)=>{
+    //     var message = {};
+    //     message.msg = msg;
+    //     message.type = "system";
+    //
+    //     $scope.messages.push(message);
+    //     $scope.$apply();
+    //
+    //     console.log(message.msg);
+    // });
+    //
+    // socket.on("listRoom",(r)=>{
+    //     var message = {};
+    //     message.msg = r;
+    //     message.type="list"
+    //
+    //     $scope.messages.push(message);
+    //     $scope.$apply();
+    // });
+    //
+    // socket.on("getJoinedRooms",(joinedRooms)=>{
+    //     var message = {};
+    //     message.msg = joinedRooms.msg;
+    //     message.type="joined"
+    //
+    //     $scope.messages.push(message);
+    //     $scope.joinedRooms = joinedRooms.list;
+    //     $scope.$apply();
+    // });
+    //
     socket.on("sendMessage",(msg)=>{
+        console.log(msg);
         var message = {};
         var message = msg;
         message.type = "message";
-
 
         $scope.messages.push(message);
         $scope.$apply();
@@ -140,8 +146,8 @@ app.controller("chatCtrl",($scope, $stateParams)=>{
         console.log($scope.messages);
     });
 
-    socket.on("updateRoomList",(roomList)=>{
-        $scope.allRoomList = roomList;
+    socket.on("updateInquiryList",(inquiryList)=>{
+        $scope.allInquiryList = inquiryList;
         $scope.$apply();
         // console.log($scope.allRoomList);
     });
@@ -178,7 +184,7 @@ app.controller("chatBoxCtrl",($scope,$stateParams)=>{
     };
 
     $scope.autojoinRoom = ()=>{
-
+        console.log($scope.chatID);
       socket.emit("joinRoom",$scope.chatID);
     //   console.log("init");
     };
