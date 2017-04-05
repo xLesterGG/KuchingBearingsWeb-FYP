@@ -76,155 +76,58 @@ var c = database.ref('/conversations/'); // to receive incoming messages and upd
 var isReady = false;
 
 socket.on("connection",(client)=>{
-    client.joinedRooms = [];
-    client.ownedRooms = [];
 
-    client.on("join",(name)=>{
-        console.log('joined');
-
-        database.ref('/conversations').once('value').then((res)=>{ // retrieve once client is connected
-            console.log('get once');
-            if(res.val() != null ){
-                for(var key in res.val()){
-                    conversations[key] = res.val()[key];
-                    // console.log(chats[key]);
-                }
-                isReady = true;
+    database.ref('/conversations').once('value').then((res)=>{ // retrieve once client is connected
+        console.log('get once');
+        if(res.val() != null ){
+            for(var key in res.val()){
+                conversations[key] = res.val()[key];
             }
-            else{
-                //something to say no enquiries yet
-                isReady = true;
-            }
-        });
+            isReady = true;
+        }
+        else{
+            //something to say no enquiries yet
+            isReady = true;
+        }
+    });
 
-        var b = database.ref('/conversations');
-        b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message), create new entry in associative array
-            console.log('child added')
-            if(isReady){
-                // console.log(res.val())
-                for(var key in res.val())
+    var b = database.ref('/conversations');
+    b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message), create new entry in associative array
+        console.log('child added')
+        if(isReady){
+            // console.log(res.val())
+            for(var key in res.val())
+            {
+                if(conversations[key] == undefined)
                 {
-                    if(conversations[key] == undefined)
-                    {
-                        // console.log('child added');
-                        conversations[key] = res.val()[key];
-                    }
+                    // console.log('child added');
+                    conversations[key] = res.val()[key];
                 }
-
             }
-        });
 
-        c.on('child_changed',(res)=>{
-            console.log('child changed')
-            // var l = Object.keys(conversations[res.key]).length;
-            // var c = 0;
-            //
-            // for(var key in res.val()){
-            //     c++;
-            //     if(c > l){
-            //         console.log('new message')
-            //         conversations[res.key][key] = (res.val()[key]);
-            //         var temp = res.val()[key];
-            //         temp.inquiryID = res.key
-            //         // client.emit("sendMessage",temp)
-            //     }
-            //         //    socket.to(res.val().messages[0].roomID).emit("sendMessage",res.val().messages[k]);
-            // }
+        }
+    });
 
-        });
+    c.on('child_changed',(res)=>{
+        console.log('child changed')
+        var l = Object.keys(conversations[res.key]).length;
+        var c = 0;
 
-
-
-        // var joinedRooms = [];  // list of room ids
-        // var ownedRooms = []; // list of room ids
-
-        // people[client.id] = {"name" : name, "joinedRooms": joinedRooms, "ownedRooms": ownedRooms};   //create new people object
-        // client.emit("systemMessage", "You (" + name + ") have connected to the server"); // alert
-
-        // var message;
-        // if(ready){
-        //     if(Object.keys(inquiries).length == 0 ){
-        //         message= "There are currently no inquiries";
-        //     }else{
-        //         var msg = "The available inquiries are ";
-        //
-        //         var aR = [];
-        //         for(var key in inquiries){
-        //             aR.push(inquiries[key]);
-        //         }
-        //
-        //         for(var i = 0 ; i < aR.length;i++){
-        //             if(i==0){
-        //                 msg = msg + aR[i].inquiryName ;
-        //             }
-        //             else if(i == rooms.length -1){
-        //                 msg = msg + "," +aR[i].inquiryName + "." ;
-        //             }
-        //             else{
-        //                 msg = msg + ","+ aR[i].inquiryName ;
-        //             }
-        //         }
-        //
-        //         message  = msg;
-        //     }
-        //     client.emit("listRoom",message); // list available rooms
-        //     socket.sockets.emit("updateRoomList",conversations);
-        // }
+        for(var key in res.val()){
+            c++;
+            if(c > l){
+                console.log('new message')
+                conversations[res.key][key] = (res.val()[key]);
+                var temp = res.val()[key];
+                temp.inquiryID = res.key
+                client.emit("sendMessage",temp)
+            }
+                //    socket.to(res.val().messages[0].roomID).emit("sendMessage",res.val().messages[k]);
+        }
 
     });
 
-    // client.on("createRoom",(name)=>{
-    //     var id = uuid.v4();
-    //     var room = new Room(name,id,client.id); // create room obj
-    //
-    //     // people[client.id].ownedRooms.push(room.id); // update people object
-    //     // people[client.id].joinedRooms.push(room.roomID); // update people object
-    //
-    //     // room.addPerson(client.id); // update room object
-    //     room.peoples.push(client.id);
-    //
-        // database.ref('/enquiries/'+room.id).set({
-        //     roomName:room.name,
-        //     roomID:room.id,
-        //     roomOwner: room.owner,
-        //     peoples : room.peoples
-        // });
-    //
-    //     client.joinedRooms.push(room.id); // update socket object
-    //     // client.ownedRooms.push(room.id); // update socket object
-    //
-    //     client.join(client.joinedRooms[client.joinedRooms.length -1 ], ()=>{ // join room
-    //         socket.sockets.emit("updateRoomList",rooms);
-    //
-    //         client.emit("systemMessage","Welcome to room " + room.name +".");
-    //         client.emit("systemMessage", "You are the owner of this room and you are automatically joined.");
-    //         client.emit("systemMessage", "Room id is " + room.id);
-    //
-    //         var joinedRooms = {};
-    //         joinedRooms.list = [];
-    //
-    //         var msg = "You are currenly joined to rooms : "
-    //         for(var i = 0; i<client.joinedRooms.length;i++){
-    //             if(i==0){
-    //                    msg = msg + rooms[client.joinedRooms[i]].roomName ;
-    //                    joinedRooms.list.push(rooms[client.joinedRooms[i]]);
-    //                }
-    //                else if(i == client.joinedRooms.length -1){
-    //                    msg = msg + "," +rooms[client.joinedRooms[i]].roomName + "." ;
-    //                    joinedRooms.list.push(rooms[client.joinedRooms[i]]);
-    //                }
-    //                else{
-    //                    msg = msg + ","+ rooms[client.joinedRooms[i]].roomName ;
-    //                    joinedRooms.list.push(rooms[client.joinedRooms[i]]);
-    //                }
-    //         }
-    //         joinedRooms.msg = msg;
-    //         client.emit("getJoinedRooms",joinedRooms); // list joined rooms
-    //     });
-    // });
-
-
-
+    
     client.on("joinRoom", (id)=>{
         var inq = inquiries[id];
         if(inq != undefined){
@@ -246,8 +149,6 @@ socket.on("connection",(client)=>{
 
                     // client.emit("systemMessage", "You have already joined this room.");
                 }else{
-                    // room.addPerson(client.id);
-                    // room.inquiryPeoples.push(client.id);
 
                     inq.inquiryPeoples.push('admin');
                     console.log(inq.inquiryPeoples);
@@ -263,35 +164,7 @@ socket.on("connection",(client)=>{
                     update['/inquiries/'+ inq.inquiryID] = data;
                     database.ref().update(update);
 
-                    // people[client.id].joinedRooms.push(room.id);
-                    // client.joinedRooms.push(room.roomID);
-                    // client.join(client.joinedRooms[client.joinedRooms.length-1],()=>{
-                    //
-                    //     socket.sockets.in(room.roomID).emit("systemMessage",people[client.id].name + " has connected to the room "+ room.roomName);
-                    //     client.emit("systemMessage","Welcome to room " + room.roomName +".");
-                    //     client.emit("systemMessage", "Room id is " + room.roomID);
-                    //
-                    //     var joinedRooms = {};
-                    //     joinedRooms.list = [];
-                    //
-                    //     var msg = "You are currenly joined to rooms : "
-                    //     for(var i = 0; i<client.joinedRooms.length;i++){
-                    //         if(i==0){
-                    //                msg = msg + rooms[client.joinedRooms[i]].roomName ;
-                    //                joinedRooms.list.push(rooms[client.joinedRooms[i]]);
-                    //            }
-                    //            else if(i == client.joinedRooms.length -1){
-                    //                msg = msg + "," +rooms[client.joinedRooms[i]].roomName + "." ;
-                    //                joinedRooms.list.push(rooms[client.joinedRooms[i]]);
-                    //            }
-                    //            else{
-                    //                msg = msg + ","+ rooms[client.joinedRooms[i]].roomName ;
-                    //                joinedRooms.list.push(rooms[client.joinedRooms[i]]);
-                    //            }
-                    //     }
-                    //     joinedRooms.msg = msg;
-                    //     client.emit("getJoinedRooms",joinedRooms); // list joined rooms
-                    // });
+
                 }
             }
         }else{
@@ -309,6 +182,7 @@ socket.on("connection",(client)=>{
 
     client.on("sendMessage",(message)=>{ // message, room id,
         var inq = inquiries[message.dest]; // inquiry id
+        console.log('sending');
 
         if(inq== null){
             // do something
@@ -323,11 +197,10 @@ socket.on("connection",(client)=>{
                     msg.msg = 'admin: ' +message.mess;
                     // msg.inquiryID = inq.inquiryID;
                     msg.sender = 'admin';
+                    console.log(inq.inquiryID);
 
                     if(conversations[inq.inquiryID]== null){
-                        // chats[room.roomID] = [];
-                        // var a = [];
-                        // a.push(msg);
+                        console.log('not null');
 
                         database.ref('/conversations/'+inq.inquiryID).push({
                             messageText: msg.msg,
@@ -336,22 +209,14 @@ socket.on("connection",(client)=>{
                         });
                     }
                     else{
-                        // var b =  [];
-                        // // console.log('SENDING');
-                        // // console.log('length of ori' chats[room.roomID].length);
-                        // b = JSON.parse(JSON.stringify(chats[room.roomID]));
-                        // b.push(msg);
-                        // // console.log(b);
-                        // var data = {
-                        //     messages : b
-                        // }
-                        //
-                        // var update = {};
-                        // update['/chats/'+ room.roomID] = data;
-                        // database.ref().update(update);
+
+                        database.ref('/conversations/'+inq.inquiryID).push({
+                            messageText: msg.msg,
+                            messageTime : '1491267891768',
+                            messageuser : msg.sender
+                        });
                     }
 
-                    // socket.to(room.id).emit("sendMessage",msg);
                     break;
                 }
             }
