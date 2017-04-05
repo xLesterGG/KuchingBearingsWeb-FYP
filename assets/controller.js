@@ -42,9 +42,27 @@ app.config(function($stateProvider,$urlRouterProvider) {
 
 })
 
+app.service('messageService',function() {
+  var messageConvo = [];
+
+  var addMessage = function(newObj){
+      messageConvo.push(newObj);
+      console.log(newObj);
+  };
+
+  var getMessage = function(){
+    return messageConvo;
+  };
+
+  return {
+    addMessage: addMessage,
+    getMessage: getMessage
+  };
+});
+
 var socket = io.connect("http://localhost:3000");
 
-app.controller("chatCtrl",($scope, $stateParams)=>{
+app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
 
     // $scope.required = true;
 //    console.log(chatID.length);
@@ -74,15 +92,15 @@ app.controller("chatCtrl",($scope, $stateParams)=>{
 
 
     socket.on("sendMessage",(msg)=>{
-        console.log(msg);
         var message = {};
         var message = msg;
-        message.type = "message";
 
-        $scope.messages.push(message);
+      //  $scope.messages.push(message);
+        messageService.addMessage(message);
         $scope.$apply();
 
-        console.log($scope.messages);
+      //  console.log($scope.messages[0].messageText);
+
     });
 
     socket.on("updateInquiryList",(inquiryList)=>{
@@ -94,8 +112,11 @@ app.controller("chatCtrl",($scope, $stateParams)=>{
 
 });
 
-app.controller("chatBoxCtrl",($scope,$stateParams)=>{
+app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
     $scope.chatID = $stateParams.id; //get chat id
+      $scope.messages = messageService.getMessage(); //get messages
+      console.log($scope.messages[0]);
+
 
     // $scope.filterRoom = '';
 

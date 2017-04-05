@@ -4,9 +4,9 @@
     <h1>Conversation</h1>
 
       <div class="row" data-ng-init="autojoinRoom()">
-          <div style="overflow:auto; height:250px;">
+          <div style="overflow:auto; height:250px;" id="convo">
               <ul class="list-group">
-                  <li class="list-group-item" data-ng-repeat="msg in messages| filter: filterR track by $index ">
+                  <li class="list-group-item" data-ng-repeat="msg in messages |filter: filterR track by $index ">
                       {{msg.messageText}}
                   </li>
               </ul>

@@ -1,4 +1,4 @@
-var fs = require('fs');
+ var fs = require('fs');
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -60,15 +60,7 @@ var conversations = {};
 
 var ready = false;
 var a = database.ref('/inquiries'); // get changes to rooms
-a.on('value',function(res){
-    console.log('loaded / new inquiry');
-    for(var r in res.val()){
-         inquiries[r] = res.val()[r];
-    }
 
-    ready = true;
-    socket.sockets.emit("updateInquiryList",inquiries);
-});
 
 var c = database.ref('/conversations/'); // to receive incoming messages and update view
 
@@ -77,12 +69,32 @@ var isReady = false;
 
 socket.on("connection",(client)=>{
 
+    a.on('value',function(res){
+        console.log('loaded / new inquiry');
+        for(var r in res.val()){
+             inquiries[r] = res.val()[r];
+        }
+
+        ready = true;
+        socket.sockets.emit("updateInquiryList",inquiries);
+    });
+
     database.ref('/conversations').once('value').then((res)=>{ // retrieve once client is connected
         console.log('get once');
         if(res.val() != null ){
             for(var key in res.val()){
                 conversations[key] = res.val()[key];
             }
+
+            for(var k in conversations){
+              for(var j in conversations[k]){
+                var temp = conversations[k][j];
+                temp.inquiryID = k;
+                client.emit("sendMessage",temp);
+                console.log (temp.messageText);
+              }
+            }
+
             isReady = true;
         }
         else{
@@ -127,7 +139,7 @@ socket.on("connection",(client)=>{
 
     });
 
-    
+
     client.on("joinRoom", (id)=>{
         var inq = inquiries[id];
         if(inq != undefined){
