@@ -47,7 +47,7 @@ app.service('messageService',function() {
 
   var addMessage = function(newObj){
       messageConvo.push(newObj);
-      console.log(newObj);
+    //   console.log(newObj);
   };
 
   var getMessage = function(){
@@ -96,6 +96,8 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
         var message = msg;
 
       //  $scope.messages.push(message);
+
+      console.log(msg);
         messageService.addMessage(message);
         $scope.$apply();
 
@@ -115,7 +117,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
 app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
     $scope.chatID = $stateParams.id; //get chat id
       $scope.messages = messageService.getMessage(); //get messages
-      console.log($scope.messages[0]);
+    //   console.log($scope.messages[0]);
 
 
     // $scope.filterRoom = '';

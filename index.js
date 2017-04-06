@@ -91,7 +91,7 @@ socket.on("connection",(client)=>{
                 var temp = conversations[k][j];
                 temp.inquiryID = k;
                 client.emit("sendMessage",temp);
-                console.log (temp.messageText);
+                // console.log (temp.messageText);
               }
             }
 
@@ -108,14 +108,29 @@ socket.on("connection",(client)=>{
         console.log('child added')
         if(isReady){
             // console.log(res.val())
-            for(var key in res.val())
+            console.log(res.key);
+
+            if(conversations[res.key] == undefined)
             {
-                if(conversations[key] == undefined)
-                {
-                    // console.log('child added');
-                    conversations[key] = res.val()[key];
+                conversations[res.key] = {};
+                for(var k in res.val()){
+
+                    // console.log(res.val()[k]);
+                    conversations[res.key][k] = res.val()[k];
+                    var temp = conversations[res.key][k];
+                    temp.inquiryID = res.key;
+                    console.log('temp is');
+                    console.log(temp);
+                    // console.log('key is ' + key);
+                    client.emit("sendMessage",temp)
                 }
             }
+
+
+                // for(var key in res.val())
+                // {
+                //
+                // }
 
         }
     });
@@ -216,7 +231,7 @@ socket.on("connection",(client)=>{
 
                         database.ref('/conversations/'+inq.inquiryID).push({
                             messageText: msg.msg,
-                            messageTime : '1491267891768',
+                            messageTime : parseInt(new Date().getTime()),
                             messageuser : msg.sender
                         });
                     }
@@ -224,7 +239,7 @@ socket.on("connection",(client)=>{
 
                         database.ref('/conversations/'+inq.inquiryID).push({
                             messageText: msg.msg,
-                            messageTime : '1491267891768',
+                            messageTime : parseInt(new Date().getTime()),
                             messageuser : msg.sender
                         });
                     }
