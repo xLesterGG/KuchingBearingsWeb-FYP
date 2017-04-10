@@ -2,15 +2,16 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
         <script src="/socket.io/socket.io.js"></script>
 
     </head>
     <body>
         <div class="container" data-ng-controller="chatCtrl">
-            <h1>Home Page Testing</h1>
+        </br>
           <div class="container slide">
             <div class="row">
-              <div class="col-md-3">
+              <div class="col-md-3" id="navbar">
                 <div class="pa-sidebar well well-small">
                   <ul class="nav nav-list">
                     <li class="nav-header"><a data-ui-sref="admin"> Admin </a></li>
@@ -27,7 +28,8 @@
                 </div>
               </div>
 
-              <div ui-view>abc</div>
+
+              <div ui-view></div>
 
             </div>
           </div>

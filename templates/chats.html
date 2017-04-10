@@ -1,35 +1,34 @@
 <div>
-  <div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter()" class="col-md-6">
+  <div  class="container">
+    <div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter()" class="col-md-6 third">
 
-    <h1>Conversation</h1>
+      <h1>Conversation</h1>
 
-      <div class="row" data-ng-init="autojoinRoom()">
-          <div style="overflow:auto; height:250px;" id="convo">
-              <ul class="list-group">
-                  <li class="list-group-item" data-ng-repeat="msg in messages |filter: filterR track by $index ">
-                      {{msg.messageText}}
-                  </li>
-              </ul>
-          </div>
-            <!-- <div class="d-flex w-100 justify-content-between list-group-item" data-ng-repeat="msg in messages| filter: filterR track by $index">
-                <p class="mb-1"> {{msg.msg}} </p>
-            </div> -->
+        <div class="row" data-ng-init="autojoinRoom()">
+            <div id="convo">
+                <ul class="list-group">
+                    <li class="list-group-item" data-ng-repeat="msg in messages |filter: filterR track by $index ">
+                        {{msg.messageText}}
+                    </li>
+                </ul>
+            </div>
+              <!-- <div class="d-flex w-100 justify-content-between list-group-item" data-ng-repeat="msg in messages| filter: filterR track by $index">
+                  <p class="mb-1"> {{msg.msg}} </p>
+              </div> -->
 
 
 
-              <div class="col-md-4 form-group">
-                <form ng-submit="sendMessage2()">
-                  <label for="message">Message</label>
+                <div class="col-md-4 form-group">
+                  <form ng-submit="sendMessage2()">
+                    <label for="message">Message</label>
 
-                    <input type="text" data-ng-model="inputMessage" class="form-control" id="message" />
-                    <br>
-                    <button type="button" data-ng-click="sendMessage2()" class="btn btn-primary btn-md">Send</button>
+                      <input type="text" data-ng-model="inputMessage" class="form-control" id="message" />
+                      <br>
+                      <button type="button" data-ng-click="sendMessage2()" class="btn btn-primary btn-md">Send</button>
 
-                </form>
-              </div>
+                  </form>
+                </div>
+        </div>
       </div>
-    </div>
-
-
-
+  </div>
 </div>

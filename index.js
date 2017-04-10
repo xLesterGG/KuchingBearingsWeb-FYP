@@ -34,6 +34,7 @@ app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); /
 app.use('/css',express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 app.use('/js', express.static(__dirname + '/node_modules/angular'));
 app.use('/js', express.static(__dirname + '/assets'));
+app.use('/css', express.static(__dirname + '/assets')); // for style.css
 app.use('/socket.io',express.static(__dirname+'/node_modules/socket.io-client/dist'));
 app.use('/js',express.static(__dirname + '/node_modules/firebase'));
 app.use('/templates', express.static(__dirname + '/templates')); //template html

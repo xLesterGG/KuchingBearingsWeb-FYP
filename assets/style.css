@@ -1,0 +1,25 @@
+body{
+  background-image: image(/background.jpg);
+}
+
+
+#navbar{
+  border-right: 1px solid #D3D3D3;
+  height: 95%;
+  padding-top: 20px;
+}
+
+.first{
+  height: 95%;
+}
+
+.second{
+  border-right: 1px solid #D3D3D3;
+  height: 95%;
+}
+
+#convo{
+  overflow: :auto;
+  height: 250px;
+  padding-left: 15px;
+}
