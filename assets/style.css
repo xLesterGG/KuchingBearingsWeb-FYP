@@ -1,12 +1,18 @@
 body{
-  background-image: image(/background.jpg);
+  background-color: #F5F5DC;
 }
 
 
 #navbar{
-  border-right: 1px solid #D3D3D3;
-  height: 95%;
+  border: 1px solid #000000;
+  height: 100%;
   padding-top: 20px;
+  background-color: #D3D3D3;
+}
+
+#navbar a{
+  text-decoration: none;
+  text-decoration-color: #000000;
 }
 
 .first{
@@ -15,7 +21,7 @@ body{
 
 .second{
   border-right: 1px solid #D3D3D3;
-  height: 95%;
+  height: 100%;
 }
 
 #convo{
