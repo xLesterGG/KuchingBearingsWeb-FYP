@@ -91,7 +91,7 @@ socket.on("connection",(client)=>{
               for(var j in conversations[k]){
                 var temp = conversations[k][j];
                 temp.inquiryID = k;
-                client.emit("sendMessage",temp);
+                client.emit("loadMessage",temp);
                 // console.log (temp.messageText);
               }
             }
@@ -123,7 +123,7 @@ socket.on("connection",(client)=>{
                     console.log('temp is');
                     console.log(temp);
                     // console.log('key is ' + key);
-                    client.emit("sendMessage",temp)
+                    client.emit("recieveMessage",temp)
                 }
             }
 
@@ -137,7 +137,7 @@ socket.on("connection",(client)=>{
     });
 
     c.on('child_changed',(res)=>{
-        console.log('child changed')
+        // console.log('child changed')
         var l = Object.keys(conversations[res.key]).length;
         var c = 0;
 
@@ -148,9 +148,8 @@ socket.on("connection",(client)=>{
                 conversations[res.key][key] = (res.val()[key]);
                 var temp = res.val()[key];
                 temp.inquiryID = res.key
-                client.emit("sendMessage",temp)
+                client.emit("recieveMessage",temp)
             }
-                //    socket.to(res.val().messages[0].roomID).emit("sendMessage",res.val().messages[k]);
         }
 
     });
@@ -159,8 +158,6 @@ socket.on("connection",(client)=>{
     client.on("joinRoom", (id)=>{
         var inq = inquiries[id];
         if(inq != undefined){
-            console.log('defined');
-
             if('admin' === inq.inquiryOwner){
                 // client.emit("systemMessage","You are the owner of this room and you have already been joined.");
             }else{
@@ -233,7 +230,7 @@ socket.on("connection",(client)=>{
                         database.ref('/conversations/'+inq.inquiryID).push({
                             messageText: msg.msg,
                             messageTime : parseInt(new Date().getTime()),
-                            messageuser : msg.sender
+                            messageUser : msg.sender
                         });
                     }
                     else{
@@ -241,7 +238,7 @@ socket.on("connection",(client)=>{
                         database.ref('/conversations/'+inq.inquiryID).push({
                             messageText: msg.msg,
                             messageTime : parseInt(new Date().getTime()),
-                            messageuser : msg.sender
+                            messageUser : msg.sender
                         });
                     }
 

@@ -8,28 +8,31 @@
     </head>
     <body>
         <div data-ng-controller="chatCtrl">
-          <div>
+
+        <div>
             <div class="row">
-              <div class="col-md-2" id="navbar">
-                  <ul class="nav nav-list">
-                    <li class="nav-header"><a data-ui-sref="admin"> Admin </a></li>
+                <div class="col-md-2" id="navbar">
+                    <ul class="nav nav-list">
+                        <li class="nav-header"><a data-ui-sref="admin"> Admin </a></li>
 
-                    <li class="nav-header"><a data-ui-sref="inbox"> Inbox </a>
-                      <a data-ui-sref="inbox.Read"> Read </a>
-                      <a data-ui-sref="inbox.Unread"> Unread </a>
-                      <a data-ui-sref="inbox.Paid"> Paid </a>
-                    </li>
+                        <li class="nav-header">
+                            <a data-ui-sref="inbox"> Inbox </a>
+                            <a data-ui-sref="inbox.Read"> Read </a>
+                            <a data-ui-sref="inbox.Unread"> Unread </a>
+                            <a data-ui-sref="inbox.Paid"> Paid </a>
+                        </li>
 
-                    <li class="nav-header"><a data-ui-sref="history"> History </a></li>
+                        <li class="nav-header"><a data-ui-sref="history"> History </a></li>
+                        <li class="nav-header"><a href="/">Home</a>
 
-                  </ul>
-              </div>
+                        </li>
+                    </ul>
+                </div>
 
 
-              <div ui-view></div>
-
+                <div ui-view></div>
             </div>
-          </div>
+        </div>
         </div>
 
         <script src="/js/jquery.js"></script>

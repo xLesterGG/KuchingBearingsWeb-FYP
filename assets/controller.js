@@ -1,4 +1,13 @@
 var app = angular.module("myApp",['ui.router']);
+document.addEventListener('DOMContentLoaded', function () {
+    if (!Notification) {
+        alert('Desktop notifications not available in your browser. Try Chrome.');
+        return;
+    }
+
+    if (Notification.permission !== "granted")
+        Notification.requestPermission();
+});
 
 app.config(function($stateProvider,$urlRouterProvider) {
 //  $urlRouterProvider.otherwise('/home');
@@ -43,10 +52,13 @@ app.config(function($stateProvider,$urlRouterProvider) {
 })
 
 app.service('messageService',function() {
+
   var messageConvo = [];
 
   var addMessage = function(newObj){
       messageConvo.push(newObj);
+      console.log(messageConvo);
+      console.log('fkkkkkkk');
     //   console.log(newObj);
   };
 
@@ -64,6 +76,7 @@ var socket = io.connect("http://localhost:3000");
 
 app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
 
+
     // $scope.required = true;
 //    console.log(chatID.length);
     // console.log(socket);
@@ -71,7 +84,6 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
     $scope.inputMessage = '';
     $scope.hideSend = true;
     $scope.hideRoom = true;
-    $scope.joinedRooms = [];
     $scope.allInquiryList = [];
 
     $scope.messages = [];
@@ -90,18 +102,42 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
     //     $scope.hideRoom = false;
     // };
 
+    socket.on("loadMessage",(msg)=>{
+        // var message = {};
+        var message = msg;
+        messageService.addMessage(message);
+        $scope.$apply();
 
-    socket.on("sendMessage",(msg)=>{
+    });
+
+    socket.on("recieveMessage",(msg)=>{
+        console.log('recieving message');
         var message = {};
         var message = msg;
-
-      //  $scope.messages.push(message);
+    //    $scope.messages.push(message);
+        console.log()
+    //   console.log($scope.allInquiryList[msg.inquiryID].inquiryName);
+        $scope.notificationtitle = $scope.allInquiryList[msg.inquiryID].inquiryName;
 
       console.log(msg);
         messageService.addMessage(message);
         $scope.$apply();
 
-      //  console.log($scope.messages[0].messageText);
+        if(message.messageUser!= 'admin'){
+            if (Notification.permission !== "granted")
+                Notification.requestPermission();
+            else {
+                var notification = new Notification($scope.notificationtitle, {
+                    icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+                    body: message.messageText,
+                });
+
+                notification.onclick = function () {
+                    window.open("http://localhost:3000/#!/inbox/chat/"+msg.inquiryID ,'_self');
+                };
+
+            }
+        }
 
     });
 
