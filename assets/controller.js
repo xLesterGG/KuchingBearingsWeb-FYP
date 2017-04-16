@@ -58,7 +58,6 @@ app.service('messageService',function() {
   var addMessage = function(newObj){
       messageConvo.push(newObj);
       console.log(messageConvo);
-      console.log('fkkkkkkk');
     //   console.log(newObj);
   };
 
@@ -76,10 +75,6 @@ var socket = io.connect("http://localhost:3000");
 
 app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
 
-
-    // $scope.required = true;
-//    console.log(chatID.length);
-    // console.log(socket);
     $scope.rname = '';
     $scope.inputMessage = '';
     $scope.hideSend = true;
@@ -152,22 +147,15 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
 
 app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
     $scope.chatID = $stateParams.id; //get chat id
-      $scope.messages = messageService.getMessage(); //get messages
-    //   console.log($scope.messages[0]);
+    $scope.messages = messageService.getMessage(); //get messages
 
-
-    // $scope.filterRoom = '';
-
-    // $scope.filterR = '';
 
     $scope.updateFilter = ()=>{
-    //     // console.log($scope.filterRoom);
-    //     // if($scope.filterRoom == 'clear'){
-    //     //     $scope.filterR = {};
-    //     // }
-    //     // else{
-            $scope.filterR = {'inquiryID': $stateParams.id};
-    //     // }
+        $scope.filterR = {'inquiryID': $stateParams.id};
+        $(document).ready(function(){
+        $('#convo').animate({
+            scrollTop: $('#convo')[0].scrollHeight}, 0);
+        });
     };
 
 

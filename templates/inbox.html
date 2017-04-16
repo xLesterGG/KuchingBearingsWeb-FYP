@@ -1,29 +1,40 @@
-<div>
-
-    <div class="row">
-
-      <div class="col-md-3 second">
+<div class="row" >
+    <div class="col-md-5 second" id="cont">
         <h1> Inbox </h1>
-
-
-        <div class="list-group">
-           <!-- <li data-ng-repeat="room in allRoomList track by $index" class="list-group-item list-group-item-action"> -->
+        <div id="inqs">
+            <!-- <div class="list-group">
                 <a data-ng-repeat="inq in allInquiryList track by $index" class="list-group-item list-group-item-action" data-ui-sref="inbox.chat({id: inq.inquiryID})">
-                  <div class="d-flex w-100 justify-content-between">
+
+                    <div class="d-flex w-100 justify-content-between">
                         <p class="mb-1">{{inq.inquiryID}}
                         <small>3 days ago</small> </p>
-                  </div>
-                      <p class="mb-1">simple preview</p>
+                    </div>
+
+                    <p class="mb-1">simple preview</p>
                 </a>
-            <!-- </li> -->
+            </div> -->
+            <ul class="people" >
+                <li class="person" data-ng-repeat="inq in allInquiryList track by $index" data-ui-sref="inbox.chat({id: inq.inquiryID})">
+                    <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt="" />
+                    <!-- <span class="name"> Conversation name is    {{inq.inquiryName}}</span> -->
+                    <span class="name">{{inq.inquiryID}}</span>
+                    <span class="time">{{inq.lastMessage.messageTime | date: 'hh:mm:a' }}</span>
+                    <span class="preview">{{inq.lastMessage.messageText}}</span>
+
+                </li>
+            </ul>
+
+
         </div>
 
-      </div>
-
-
-      <div data-ui-view>
-          <p align="center" style="padding-top: 150px;">Click on one of the conversations on the left </p>
-      </div>
-
     </div>
+
+    <div class="col-md-7 col-lg-7">
+        <div data-ui-view >
+            <!-- <p align="center" style="padding-top: 150px;">
+                Click on one of the conversations on the left
+            </p> -->
+        </div>
+    </div>
+
 </div>

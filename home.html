@@ -7,32 +7,33 @@
 
     </head>
     <body>
-        <div data-ng-controller="chatCtrl">
+        <div data-ng-controller="chatCtrl" class="container" >
+            <div id="con">
+                <div class="row" id="box">
+                    <div class="col-md-2 col-lg-2" id="navbar">
+                        <ul class="nav nav-lis">
+                            <li class="nav-header"><a data-ui-sref="admin"> Admin </a></li>
 
-        <div>
-            <div class="row">
-                <div class="col-md-2" id="navbar">
-                    <ul class="nav nav-list">
-                        <li class="nav-header"><a data-ui-sref="admin"> Admin </a></li>
+                            <li class="nav-header">
+                                <a data-ui-sref="inbox"> Inbox </a>
+                                <a data-ui-sref="inbox.Read"> Read </a>
+                                <a data-ui-sref="inbox.Unread"> Unread </a>
+                                <a data-ui-sref="inbox.Paid"> Paid </a>
+                            </li>
 
-                        <li class="nav-header">
-                            <a data-ui-sref="inbox"> Inbox </a>
-                            <a data-ui-sref="inbox.Read"> Read </a>
-                            <a data-ui-sref="inbox.Unread"> Unread </a>
-                            <a data-ui-sref="inbox.Paid"> Paid </a>
-                        </li>
+                            <li class="nav-header"><a data-ui-sref="history"> History </a></li>
+                            <li class="nav-header"><a href="/">Home</a>
 
-                        <li class="nav-header"><a data-ui-sref="history"> History </a></li>
-                        <li class="nav-header"><a href="/">Home</a>
+                            </li>
+                        </ul>
+                    </div>
 
-                        </li>
-                    </ul>
+                    <div class="col-md-10 col-lg-10">
+                        <div ui-view></div>
+                    </div>
+
                 </div>
-
-
-                <div ui-view></div>
             </div>
-        </div>
         </div>
 
         <script src="/js/jquery.js"></script>

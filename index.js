@@ -219,7 +219,7 @@ socket.on("connection",(client)=>{
 
                     var msg = {};
                     // msg.msg =  people[client.id].name + ": " +message.mess;
-                    msg.msg = 'admin: ' +message.mess;
+                    msg.msg = message.mess;
                     // msg.inquiryID = inq.inquiryID;
                     msg.sender = 'admin';
                     console.log(inq.inquiryID);
@@ -232,6 +232,27 @@ socket.on("connection",(client)=>{
                             messageTime : parseInt(new Date().getTime()),
                             messageUser : msg.sender
                         });
+
+                        var msg = {
+                            messageText: msg.msg,
+                            messageTime : parseInt(new Date().getTime()),
+                            messageUser : msg.sender
+                        }
+
+                        var data = {
+                            inquiryPeoples: inq.inquiryPeoples,
+                            inquiryName:inq.inquiryName,
+                            inquiryID:inq.inquiryID,
+                            inquiryOwner: inq.inquiryOwner,
+                            lastMessage: msg
+                        }
+
+                        var update = {};
+                        update['/inquiries/'+ inq.inquiryID] = data;
+                        database.ref().update(update);
+
+
+                        // database.ref('/inquiries/'+ inq.inquiryID)
                     }
                     else{
 
@@ -240,6 +261,25 @@ socket.on("connection",(client)=>{
                             messageTime : parseInt(new Date().getTime()),
                             messageUser : msg.sender
                         });
+
+
+                        var msg = {
+                            messageText: msg.msg,
+                            messageTime : parseInt(new Date().getTime()),
+                            messageUser : msg.sender
+                        }
+
+                        var data = {
+                            inquiryPeoples: inq.inquiryPeoples,
+                            inquiryName:inq.inquiryName,
+                            inquiryID:inq.inquiryID,
+                            inquiryOwner: inq.inquiryOwner,
+                            lastMessage: msg
+                        }
+
+                        var update = {};
+                        update['/inquiries/'+ inq.inquiryID] = data;
+                        database.ref().update(update);
                     }
 
                     break;
