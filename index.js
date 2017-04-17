@@ -289,4 +289,54 @@ socket.on("connection",(client)=>{
 
     });
 
+    client.on("updateLastRead",(inq)=>{
+
+        var msg = {
+            messageText: inq.lastMessage.messageText,
+            messageTime : inq.lastMessage.messageTime,
+            messageUser : inq.lastMessage.messageUser,
+            messageRead : true
+        }
+
+        var data = {
+            inquiryPeoples: inq.inquiryPeoples,
+            inquiryName:inq.inquiryName,
+            inquiryID:inq.inquiryID,
+            inquiryOwner: inq.inquiryOwner,
+            lastMessage: msg
+        }
+
+        var update = {};
+        update['/inquiries/'+ inq.inquiryID] = data;
+        database.ref().update(update);
+
+    });
+
+    client.on("updateLastRead2",(inqID)=>{
+
+        var inq = inquiries[inqID];
+        // console.log(inq);
+
+        var msg = {
+            messageText: inq.lastMessage.messageText,
+            messageTime : inq.lastMessage.messageTime,
+            messageUser : inq.lastMessage.messageUser,
+            messageRead : true
+        }
+
+        var data = {
+            inquiryPeoples: inq.inquiryPeoples,
+            inquiryName:inq.inquiryName,
+            inquiryID:inq.inquiryID,
+            inquiryOwner: inq.inquiryOwner,
+            lastMessage: msg
+        }
+
+        var update = {};
+        update['/inquiries/'+ inq.inquiryID] = data;
+        database.ref().update(update);
+
+    });
+
+
 });

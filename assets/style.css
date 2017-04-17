@@ -102,7 +102,7 @@ body{
  width: 70%;
  white-space: nowrap;
  text-overflow: ellipsis;
- color: #999;
+ /*color: #999;*/
 }
 .people .person.active,  .people .person:hover {
  margin-top: -1px;

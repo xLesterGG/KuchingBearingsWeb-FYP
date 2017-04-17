@@ -14,12 +14,19 @@
                 </a>
             </div> -->
             <ul class="people" >
-                <li class="person" data-ng-repeat="inq in allInquiryList track by $index" data-ui-sref="inbox.chat({id: inq.inquiryID})">
+                <li class="person" data-ng-repeat="inq in allInquiryList track by $index" data-ui-sref="inbox.chat({id: inq.inquiryID})" data-ng-click="updateRead(inq)">
                     <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt="" />
                     <!-- <span class="name"> Conversation name is    {{inq.inquiryName}}</span> -->
                     <span class="name">{{inq.inquiryID}}</span>
                     <span class="time">{{inq.lastMessage.messageTime | date: 'hh:mm:a' }}</span>
-                    <span class="preview">{{inq.lastMessage.messageText}}</span>
+
+                    <div data-ng-show="(inq.lastMessage.messageRead==false) && (inq.lastMessage.messageUser!='admin')">
+                        <span class="preview"><strong>{{inq.lastMessage.messageText}}</strong></span>
+                    </div>
+
+                    <div data-ng-show="inq.lastMessage.messageRead==true || inq.lastMessage.messageUser=='admin'">
+                        <span class="preview">{{inq.lastMessage.messageText}}</span>
+                    </div>
 
                 </li>
             </ul>

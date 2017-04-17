@@ -57,7 +57,7 @@ app.service('messageService',function() {
 
   var addMessage = function(newObj){
       messageConvo.push(newObj);
-      console.log(messageConvo);
+    //   console.log(messageConvo);
     //   console.log(newObj);
   };
 
@@ -128,7 +128,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
                 });
 
                 notification.onclick = function () {
-                    window.open("http://localhost:3000/#!/inbox/chat/"+msg.inquiryID ,'_self');
+                    window.open("http://localhost:3000/#!/inbox/chat/"+msg.inquiryID);
                 };
 
             }
@@ -141,6 +141,11 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
         $scope.$apply();
         // console.log($scope.allRoomList);
     });
+
+    $scope.updateRead = (inq)=>{
+        console.log(inq);
+        socket.emit("updateLastRead",inq);
+    };
 
 
 });
@@ -171,8 +176,12 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
 
     $scope.autojoinRoom = ()=>{
         console.log($scope.chatID);
-      socket.emit("joinRoom",$scope.chatID);
+        socket.emit("joinRoom",$scope.chatID);
     //   console.log("init");
+    };
+
+    $scope.updateRead = ()=>{
+        socket.emit("updateLastRead2",$scope.chatID);
     };
 
 });
