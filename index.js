@@ -5,7 +5,6 @@ var server = require('http').createServer(app);
 var io = require('socket.io');
 var uuid = require('node-uuid');
 var Room = require('./room.js')
-var firebase = require('firebase');
 
 
 // var config = {
@@ -25,9 +24,11 @@ var config = {
     messagingSenderId: "630426422934"
   };
 
-firebase.initializeApp(config);
+var firebase = require('firebase');
 
+firebase.initializeApp(config);
 var database = firebase.database();
+
 
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
@@ -53,22 +54,18 @@ app.get('/',(req,res)=>{
 
 server.listen(3000,"localhost");
 var socket = io.listen(server);
-
 var people = {};
 var inquiries = {};
 var conversations = {};
 
 
 var ready = false;
-var a = database.ref('/inquiries'); // get changes to rooms
-
-
-var c = database.ref('/conversations/'); // to receive incoming messages and update view
-
-
 var isReady = false;
 
 socket.on("connection",(client)=>{
+
+    var a = database.ref('/inquiries'); // get changes to rooms
+    var c = database.ref('/conversations/'); // to receive incoming messages and update view
 
     a.on('value',function(res){
         console.log('loaded / new inquiry');
@@ -178,11 +175,19 @@ socket.on("connection",(client)=>{
                     inq.inquiryPeoples.push('admin');
                     console.log(inq.inquiryPeoples);
 
+                    var msg = {
+                            messageText: inq.lastMessage.messageText,
+                            messageTime : inq.lastMessage.messageTime,
+                            messageUser : inq.lastMessage.messageUser,
+                            messageRead : true
+                    }
+
                     var data = {
                         inquiryPeoples: inq.inquiryPeoples,
                         inquiryName:inq.inquiryName,
                         inquiryID:inq.inquiryID,
-                        inquiryOwner: inq.inquiryOwner
+                        inquiryOwner: inq.inquiryOwner,
+                        lastMessage: msg
                     }
 
                     var update = {};
@@ -250,8 +255,6 @@ socket.on("connection",(client)=>{
                         var update = {};
                         update['/inquiries/'+ inq.inquiryID] = data;
                         database.ref().update(update);
-
-
                         // database.ref('/inquiries/'+ inq.inquiryID)
                     }
                     else{
@@ -289,54 +292,54 @@ socket.on("connection",(client)=>{
 
     });
 
-    client.on("updateLastRead",(inq)=>{
-
-        var msg = {
-            messageText: inq.lastMessage.messageText,
-            messageTime : inq.lastMessage.messageTime,
-            messageUser : inq.lastMessage.messageUser,
-            messageRead : true
-        }
-
-        var data = {
-            inquiryPeoples: inq.inquiryPeoples,
-            inquiryName:inq.inquiryName,
-            inquiryID:inq.inquiryID,
-            inquiryOwner: inq.inquiryOwner,
-            lastMessage: msg
-        }
-
-        var update = {};
-        update['/inquiries/'+ inq.inquiryID] = data;
-        database.ref().update(update);
-
-    });
-
-    client.on("updateLastRead2",(inqID)=>{
-
-        var inq = inquiries[inqID];
-        // console.log(inq);
-
-        var msg = {
-            messageText: inq.lastMessage.messageText,
-            messageTime : inq.lastMessage.messageTime,
-            messageUser : inq.lastMessage.messageUser,
-            messageRead : true
-        }
-
-        var data = {
-            inquiryPeoples: inq.inquiryPeoples,
-            inquiryName:inq.inquiryName,
-            inquiryID:inq.inquiryID,
-            inquiryOwner: inq.inquiryOwner,
-            lastMessage: msg
-        }
-
-        var update = {};
-        update['/inquiries/'+ inq.inquiryID] = data;
-        database.ref().update(update);
-
-    });
+    // client.on("updateLastRead",(inq)=>{
+    //
+    //     var msg = {
+    //         messageText: inq.lastMessage.messageText,
+    //         messageTime : inq.lastMessage.messageTime,
+    //         messageUser : inq.lastMessage.messageUser,
+    //         messageRead : true
+    //     }
+    //
+    //     var data = {
+    //         inquiryPeoples: inq.inquiryPeoples,
+    //         inquiryName:inq.inquiryName,
+    //         inquiryID:inq.inquiryID,
+    //         inquiryOwner: inq.inquiryOwner,
+    //         lastMessage: msg
+    //     }
+    //
+    //     var update = {};
+    //     update['/inquiries/'+ inq.inquiryID] = data;
+    //     database.ref().update(update);
+    //
+    // });
+    //
+    // client.on("updateLastRead2",(inqID)=>{
+    //
+    //     var inq = inquiries[inqID];
+    //     // console.log(inq);
+    //
+    //     var msg = {
+    //         messageText: inq.lastMessage.messageText,
+    //         messageTime : inq.lastMessage.messageTime,
+    //         messageUser : inq.lastMessage.messageUser,
+    //         messageRead : true
+    //     }
+    //
+    //     var data = {
+    //         inquiryPeoples: inq.inquiryPeoples,
+    //         inquiryName:inq.inquiryName,
+    //         inquiryID:inq.inquiryID,
+    //         inquiryOwner: inq.inquiryOwner,
+    //         lastMessage: msg
+    //     }
+    //
+    //     var update = {};
+    //     update['/inquiries/'+ inq.inquiryID] = data;
+    //     database.ref().update(update);
+    //
+    // });
 
 
 });
