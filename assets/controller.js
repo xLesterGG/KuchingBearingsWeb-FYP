@@ -74,6 +74,7 @@ app.service('messageService',function() {
 var socket = io.connect("http://localhost:3000");
 
 app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
+    console.log('c1 loaded');
 
     $scope.rname = '';
     $scope.inputMessage = '';
@@ -151,6 +152,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
 });
 
 app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
+    console.log('c 2 loaded');
     $scope.chatID = $stateParams.id; //get chat id
     $scope.messages = messageService.getMessage(); //get messages
 

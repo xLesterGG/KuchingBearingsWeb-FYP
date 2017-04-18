@@ -24,10 +24,7 @@ var config = {
     messagingSenderId: "630426422934"
   };
 
-var firebase = require('firebase');
 
-firebase.initializeApp(config);
-var database = firebase.database();
 
 
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
@@ -58,17 +55,23 @@ var people = {};
 var inquiries = {};
 var conversations = {};
 
+var firebase = require('firebase');
+firebase.initializeApp(config);
+var database = firebase.database();
+
 
 var ready = false;
 var isReady = false;
 
+var a = database.ref('/inquiries'); // get changes to rooms
+var b = database.ref('/conversations');
+var c = database.ref('/conversations/'); // to receive incoming messages and update view
+
+
 socket.on("connection",(client)=>{
 
-    var a = database.ref('/inquiries'); // get changes to rooms
-    var c = database.ref('/conversations/'); // to receive incoming messages and update view
-
     a.on('value',function(res){
-        console.log('loaded / new inquiry');
+        // console.log('loaded / new inquiry');
         for(var r in res.val()){
              inquiries[r] = res.val()[r];
         }
@@ -89,6 +92,8 @@ socket.on("connection",(client)=>{
                 var temp = conversations[k][j];
                 temp.inquiryID = k;
                 client.emit("loadMessage",temp);
+                // socket.sockets.emit("loadMessage",temp);
+
                 // console.log (temp.messageText);
               }
             }
@@ -101,12 +106,11 @@ socket.on("connection",(client)=>{
         }
     });
 
-    var b = database.ref('/conversations');
     b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message), create new entry in associative array
-        console.log('child added')
+        // console.log('child added')
         if(isReady){
             // console.log(res.val())
-            console.log(res.key);
+            // console.log(res.key);
 
             if(conversations[res.key] == undefined)
             {
@@ -121,14 +125,10 @@ socket.on("connection",(client)=>{
                     console.log(temp);
                     // console.log('key is ' + key);
                     client.emit("recieveMessage",temp)
+                    // socket.sockets.emit("recieveMessage",temp);
+
                 }
             }
-
-
-                // for(var key in res.val())
-                // {
-                //
-                // }
 
         }
     });
@@ -145,12 +145,15 @@ socket.on("connection",(client)=>{
                 conversations[res.key][key] = (res.val()[key]);
                 var temp = res.val()[key];
                 temp.inquiryID = res.key
-                client.emit("recieveMessage",temp)
+                // client.emit("recieveMessage",temp)
+                socket.sockets.emit("recieveMessage",temp);
+
             }
         }
 
     });
 
+    // console.log('count is'+ socket.engine.clientsCount);
 
     client.on("joinRoom", (id)=>{
         var inq = inquiries[id];
