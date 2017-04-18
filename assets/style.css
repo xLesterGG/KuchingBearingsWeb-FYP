@@ -6,16 +6,19 @@ body{
 }
 
 #con{ /*outermost container*/
-    margin-top: 100px;
+    margin-top: 5%;
 }
 
 #box{
     background:rgba(255,255,255,1);
+    height: 85%;
 }
 
 #inqs{
     overflow: auto;
-    height:600px;
+    /*height:600px;*/
+    height: 87%;
+    width: 100%;
     overflow-x: hidden;
 }
 
@@ -51,6 +54,7 @@ body{
  padding: 12px 10% 16px;
  cursor: pointer;
  background-color: #fff;
+ min-height: 60px;
 
 }
 
@@ -102,6 +106,7 @@ body{
  width: 70%;
  white-space: nowrap;
  text-overflow: ellipsis;
+ padding-top: 5px;
  /*color: #999;*/
 }
 .people .person.active,  .people .person:hover {
@@ -132,7 +137,9 @@ body{
 
 #cont{
     /*background-color: black;*/
-    border:1px solid #e6e6e6;
+    /*border:1px solid #e6e6e6;*/
+    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
 
 }
 
@@ -143,7 +150,8 @@ body{
     padding-left: 40px;
 
     overflow: auto;
-    height:520px;
+    height:78%;
+    width: 100%;
     overflow-x: hidden;
 
     /*background-color: lightblue;*/
@@ -260,6 +268,8 @@ body{
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+    width: auto;
+    height: auto;
 }
 
 #convo .bubble:before {
