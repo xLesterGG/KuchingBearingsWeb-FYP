@@ -14,21 +14,28 @@ body{
     height: 85%;
 }
 
+#head{
+  padding-left: 15px;
+  border-bottom: 1px solid #e6e6e6;
+  vertical-align: middle;
+  margin-left: auto;
+  margin-right: auto;
+  width:90%;
+}
+
+
 #inqs{
     overflow: auto;
+     float: left;
     /*height:600px;*/
     height: 87%;
     width: 100%;
     overflow-x: hidden;
+    /*border-top: 1px solid #e6e6e6;*/
+    background-color: #fff;
 }
 
-#inqs{
- float: left;
- /*width: 50%;*/
- /*height: 100%;*/
- border: 1px solid #e6e6e6;
- background-color: #fff;
-}
+
 
 
 .people {
@@ -84,11 +91,11 @@ body{
  border-radius: 50%;
 }
 .people .person .name {
- font-size: 14px;
+ font-size: 18px;
  line-height: 22px;
  color: #1a1a1a;
  font-family: 'Source Sans Pro', sans-serif;
- font-weight: 600;
+ font-weight: 500;
 }
 .people .person .time {
  font-size: 14px;
@@ -134,12 +141,12 @@ body{
 
 
 
-
 #cont{
     /*background-color: black;*/
     /*border:1px solid #e6e6e6;*/
     border-left: 1px solid #e6e6e6;
     border-right: 1px solid #e6e6e6;
+    padding: 0px;
 
 }
 
@@ -229,32 +236,16 @@ body{
     background-position: center;
 }
 
-/*#navbar{
-    border: 1px solid #000000;
-    height: 100%;
-    padding-top: 20px;
-    background-color: #D3D3D3;
+#navbar{
+  padding:0px;
 }
 
-#navbar a{
-    text-decoration: none;
-    text-decoration-color: #000000;
-}*/
-
-/*.first{
-    height: 95%;
+#navbar ul li a{
+   color: black;
+   font-size: 18px;
+   font-weight: 600;
 }
 
-.second{
-    border-right: 1px solid #D3D3D3;
-    height: 100%;
-}*/
-
-/*#convo{
-  overflow: :auto;
-  height: 250px;
-  padding-left: 15px;
-}*/
 
 
 #convo .bubble {
