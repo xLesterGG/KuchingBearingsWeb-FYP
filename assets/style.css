@@ -21,6 +21,7 @@ body{
   margin-left: auto;
   margin-right: auto;
   width:90%;
+  font-family:"Trebuchet MS", Helvetica, sans-serif;
 }
 
 
@@ -131,6 +132,11 @@ body{
  padding-left: -o-calc(10% + 1px);
  padding-left: calc(10% + 1px);
 }
+
+.people .person.active,  .people .person:hover,  .people .person:focus{
+  background-color: #00b0ff;
+}
+
 .people .person.active span,  .people .person:hover span {
  color: #fff;
  background: transparent;
@@ -157,7 +163,7 @@ body{
     padding-left: 40px;
 
     overflow: auto;
-    height:78%;
+    height:72%;
     width: 100%;
     overflow-x: hidden;
 
@@ -244,6 +250,13 @@ body{
    color: black;
    font-size: 18px;
    font-weight: 600;
+   font-family:"Trebuchet MS", Helvetica, sans-serif;
+}
+
+#navbar .active{
+  background-color: #EEEEEE;
+  border-top: 1px solid #CCCCCC;
+  border-bottom: 1px solid #CCCCCC;
 }
 
 
@@ -425,6 +438,27 @@ body {
     -moz-animation-duration: 2.4s;
     -webkit-animation-duration: 2.4s;
     animation-duration: 2.4s;
+}
+
+#informations{
+  border-bottom: 1px solid black;
+  height: 17%;
+  padding-top: 3%;
+}
+
+.infoI {
+  border-right: 1px solid black;
+}
+
+.infoI img {
+  float: left;
+  width: 50px;
+  height: 50px;
+  margin-right: 12px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+
 }
 
 
