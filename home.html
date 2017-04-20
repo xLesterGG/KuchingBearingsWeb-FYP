@@ -11,20 +11,19 @@
             <div id="con">
                 <div class="row" id="box">
                     <div class="col-md-2 col-lg-2" id="navbar">
-                        <ul class="nav nav-lis">
-                            <li class="nav-header"><a data-ui-sref="admin"> Admin </a></li>
+                        <ul class="nav nav-list">
+                            <li ui-sref-active="active"><a data-ui-sref="admin"> Admin </a></li>
 
-                            <li class="nav-header">
-                                <a data-ui-sref="inbox"> Inbox </a>
-                                <a data-ui-sref="inbox.Read" style="font-size:15px; padding-left: 30px; font-weight:500;"> Read </a>
-                                <a data-ui-sref="inbox.Unread" style="font-size:15px; padding-left: 30px; font-weight:500;"> Unread </a>
-                                <a data-ui-sref="inbox.Paid" style="font-size:15px; padding-left: 30px; font-weight:500;"> Paid </a>
-                            </li>
+                            <li ui-sref-active="active"> <a data-ui-sref="inbox"> Inbox </a></li>
 
-                            <li class="nav-header"><a data-ui-sref="history"> History </a></li>
-                            <li class="nav-header"><a href="/">Home</a>
+                              <li ui-sref-active="active">  <a data-ui-sref="inbox.Read" style="font-size:15px; padding-left: 30px; font-weight:500;"> Read </a> </li>
 
-                            </li>
+                              <li ui-sref-active="active">  <a data-ui-sref="inbox.Unread" style="font-size:15px; padding-left: 30px; font-weight:500;"> Unread </a> </li>
+
+                              <li ui-sref-active="active">  <a data-ui-sref="inbox.Paid" style="font-size:15px; padding-left: 30px; font-weight:500;"> Paid </a> </li>
+
+                            <li ui-sref-active="active"> <a data-ui-sref="history"> History </a> </li>
+                            <li> <a href="/">Home</a> </li>
                         </ul>
                     </div>
 
