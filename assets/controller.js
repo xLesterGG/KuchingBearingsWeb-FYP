@@ -143,10 +143,10 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
         // console.log($scope.allRoomList);
     });
 
-    // $scope.updateRead = (inq)=>{
-    //     console.log(inq);
-    //     socket.emit("updateLastRead",inq);
-    // };
+    $scope.updateRead = (inq)=>{
+        console.log(inq);
+        socket.emit("updateLastRead",inq);
+    };
 
 
 });
@@ -182,8 +182,8 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
     //   console.log("init");
     };
 
-    // $scope.updateRead = ()=>{
-    //     socket.emit("updateLastRead2",$scope.chatID);
-    // };
+    $scope.updateRead = ()=>{
+        socket.emit("updateLastRead2",$scope.chatID);
+    };
 
 });
