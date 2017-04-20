@@ -223,8 +223,6 @@ socket.on("connection",(client)=>{
     });
 
 
-
-
     client.on("sendMessage",(message)=>{ // message, room id,
         var inq = inquiries[message.dest]; // inquiry id
         console.log('sending');
@@ -241,8 +239,16 @@ socket.on("connection",(client)=>{
                     msg.msg = message.mess;
                     msg.sender = 'admin';
                     // console.log(inq.inquiryID);
+                    // console.log('not null');
+                    var unread = 0;
 
-                    console.log('not null');
+                    if(inq.msgUnreadCountForMobile == undefined){
+                        unread = 1;
+                    }
+                    else{
+                        unread = inq.msgUnreadCountForMobile + 1;
+                    }
+
 
                     database.ref('/conversations/'+inq.inquiryID).push({
                         messageText: msg.msg,
@@ -263,7 +269,8 @@ socket.on("connection",(client)=>{
                         inquiryName:inq.inquiryName,
                         inquiryID:inq.inquiryID,
                         inquiryOwner: inq.inquiryOwner,
-                        lastMessage: msg
+                        lastMessage: msg,
+                        msgUnreadCountForMobile: unread
                     }
 
                     var update = {};
