@@ -53,6 +53,8 @@ app.config(function($stateProvider,$urlRouterProvider) {
 
 app.service('messageService',function() {
 
+
+
   var messageConvo = [];
 
   var addMessage = function(newObj){
@@ -74,7 +76,7 @@ app.service('messageService',function() {
 var socket = io.connect("http://localhost:3000");
 
 app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
-    console.log('c1 loaded');
+    // console.log('c1 loaded');
 
     $scope.rname = '';
     $scope.inputMessage = '';
@@ -111,13 +113,18 @@ app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
         var message = {};
         var message = msg;
     //    $scope.messages.push(message);
-        console.log()
+        // console.log()
     //   console.log($scope.allInquiryList[msg.inquiryID].inquiryName);
         $scope.notificationtitle = $scope.allInquiryList[msg.inquiryID].inquiryName;
 
-      console.log(msg);
+    //   console.log(msg);
         messageService.addMessage(message);
         $scope.$apply();
+
+        $(document).ready(function(){
+        $('#convo').animate({
+            scrollTop: $('#convo')[0].scrollHeight}, 0);
+        });
 
         if(message.messageUser!= 'admin'){
             if (Notification.permission !== "granted")
