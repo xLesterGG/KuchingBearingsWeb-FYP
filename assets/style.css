@@ -11,6 +11,7 @@ body{
 
 #box{
     background:rgba(255,255,255,1);
+    min-width: 1200px;
     height: 85%;
 }
 
@@ -31,6 +32,7 @@ body{
     /*height:600px;*/
     height: 87%;
     width: 100%;
+    max-height: inherit;
     overflow-x: hidden;
     /*border-top: 1px solid #e6e6e6;*/
     background-color: #fff;
@@ -440,14 +442,45 @@ body {
     animation-duration: 2.4s;
 }
 
+.third{
+  max-height: inherit;
+  float: left;
+}
+
 #informations{
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #CCCCCC;
   height: 17%;
-  padding-top: 3%;
+  min-height: 100px;
+  max-height: 17%;
+  background-color: #EEEEEE;
+  position: static;
+  /*padding-top: 15px;*/
 }
 
 .infoI {
-  border-right: 1px solid black;
+  border-right: 1px solid #CCCCCC;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  height: 100%;
+}
+
+.infoI table{
+  float:left;
+  width: auto;
+  padding-right: 0px;
+  padding-left: 2px;
+}
+
+.infoI table td{
+  text-align: left;
+}
+
+.infoI table td .value{
+  padding-left: 10px;
+}
+
+.infoI p{
+  padding-top: 15px;
+  position: fixed;
 }
 
 .infoI img {
@@ -460,6 +493,23 @@ body {
   border-radius: 50%;
 
 }
+
+.infoC{
+  height: 17%;
+  padding-top: 2%;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.infoC{
+  position: static;
+}
+
+.infoC p{
+  margin-top: 0;
+  padding-top: 0;
+}
+
+
 
 
 @keyframes slideFromLeft {
