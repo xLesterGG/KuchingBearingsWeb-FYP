@@ -4,7 +4,6 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io');
 var uuid = require('node-uuid');
-var Room = require('./room.js')
 
 
 // var config = {
@@ -249,19 +248,23 @@ socket.on("connection",(client)=>{
                         unread = inq.msgUnreadCountForMobile + 1;
                     }
 
+                    var uid = uuid.v4();
+
 
                     database.ref('/conversations/'+inq.inquiryID).push({
                         messageText: msg.msg,
                         messageTime : parseInt(new Date().getTime()),
                         messageUser : msg.sender,
-                        messageRead: false
+                        messageRead: false,
+                        messageID:uid
                     });
 
                     var msg = {
                         messageText: msg.msg,
                         messageTime : parseInt(new Date().getTime()),
                         messageUser : msg.sender,
-                        messageRead: false
+                        messageRead: false,
+                        messageID:uid
                     }
 
                     var data = {
