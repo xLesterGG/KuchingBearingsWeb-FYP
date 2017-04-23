@@ -11,52 +11,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
 app.config(function($stateProvider,$urlRouterProvider) {
 //  $urlRouterProvider.otherwise('/home');
-
+$urlRouterProvider.otherwise("home");
   $stateProvider
-    .state('admin',{
+    .state('home',{
+        url:"/home",
+        templateUrl: "templates/home.html"
+    })
+    .state('home.admin',{
       url:"/admin",
       templateUrl: "templates/admin.html"
     })
-
-    .state('admin.create',{
-      url:"/admin/create",
-      templateUrl: "templates/adminCreate.html"
-    })
-
-    .state('admin.info',{
-      url:"/admin/info",
-      templateUrl: "templates/info.html"
-    })
-
-    .state('history',{
+    //
+    // .state('admin.create',{
+    //   url:"/admin/create",
+    //   templateUrl: "templates/adminCreate.html"
+    // })
+    //
+    // .state('admin.info',{
+    //   url:"/admin/info",
+    //   templateUrl: "templates/info.html"
+    // })
+    //
+    .state('home.history',{
       url: '/history',
       templateUrl: "templates/history.html"
     })
-
-    .state('history.content',{
-      url: '/history/content',
-      templateUrl: "templates/historyContent.html"
-    })
-
-    .state('inbox',{
+    //
+    // .state('history.content',{
+    //   url: '/history/content',
+    //   templateUrl: "templates/historyContent.html"
+    // })
+    //
+    .state('home.inbox',{
       url: '/inbox',
       templateUrl: "templates/inbox.html"
     })
 
-    .state('inbox.chat',{
+    .state('home.inbox.chat',{
       url: '/chat/:id',
       templateUrl: "templates/chats.html"
-    });
-
-
+    })
+    .state('login',{
+        url:'/login',
+        templateUrl:"templates/login.html"
+    })
+    // .state('/', {
+    //     url: '/',
+    //     templateUrl: "templates/home.html"
+    //
+    // })
+    ;
 })
 
 app.service('messageService',function() {
 
-
-
   var messageConvo = [];
-
   var addMessage = function(newObj){
       messageConvo.push(newObj);
     //   console.log(messageConvo);
@@ -73,9 +82,41 @@ app.service('messageService',function() {
   };
 });
 
-var socket = io.connect("http://localhost:3000");
+var socket= io.connect("http://localhost:3000");
 
-app.controller("chatCtrl",($scope, $stateParams, messageService)=>{
+app.controller("loginCtrl",($scope)=>{
+
+
+    console.log(socket);
+    $scope.register = (email,pass)=>{
+        console.log(email + pass);
+        socket.emit("registerUser",email,pass);
+
+    }
+
+    socket.on("registerError",(err)=>{
+        alert(err);
+    });
+
+
+    $scope.login = (email,pass)=>{
+        socket.emit("loginUser",email,pass);
+    };
+
+    socket.on("redirect",(user)=>{
+        console.log(user);
+        window.location = "http://localhost:3000/#!/";
+    });
+
+});
+
+
+
+
+app.controller("chatCtrl",($scope, $stateParams, messageService,$state)=>{
+    console.log(socket);
+
+    // $state.go('inbox');
     // console.log('c1 loaded');
 
     $scope.rname = '';

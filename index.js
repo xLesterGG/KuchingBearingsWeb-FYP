@@ -37,16 +37,30 @@ app.use('/js',express.static(__dirname + '/node_modules/firebase'));
 app.use('/templates', express.static(__dirname + '/templates')); //template html
 app.use('/js',express.static(__dirname + '/node_modules/angular-ui-router/release')); // redirect angular-ui-router
 
+// app.use('/js',express.static(__dirname+'/node_modules/firebase/'));
+
 
 // app.get('/',(req,res)=>{
 //     // res.send('hello');
 //     res.sendFile(__dirname +'/index.html');
 // });
 
+// app.get('/',(req,res)=>{
+//     // res.send('hello');
+//     res.sendFile(__dirname +'/home.html');
+// });
+
 app.get('/',(req,res)=>{
     // res.send('hello');
-    res.sendFile(__dirname +'/home.html');
+    res.sendFile(__dirname +'/index1.html');
 });
+
+
+app.get('/login',(req,res)=>{
+    // res.send('hello');
+    res.sendFile(__dirname +'/login.html');
+});
+
 
 server.listen(3000,"localhost");
 var socket = io.listen(server);
@@ -339,9 +353,43 @@ socket.on("connection",(client)=>{
             database.ref().update(update);
         }
 
-
-
     });
+
+    client.on("registerUser",(email,password)=>{
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+
+          console.log(errorCode);
+          console.log(errorMessage);
+
+          client.emit("registerError",errorMessage);
+        });
+    });
+
+    client.on("loginUser",(email,password)=>{
+        console.log('logging in');
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+        });
+
+        firebase.auth().onAuthStateChanged(user => {
+            if(user) {
+            // window.location = 'home.html'; //After successful login, user will be redirected to home.html
+
+                client.emit("redirect",user);
+            }
+        });
+    });
+
+
+
+
+
 
 
 });
