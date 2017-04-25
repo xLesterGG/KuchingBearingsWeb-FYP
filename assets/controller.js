@@ -83,16 +83,18 @@ app.service('messageService',function() {
 });
 
 var socket= io.connect("http://localhost:3000");
+console.log('loading angular');
 
-app.controller("loginCtrl",($scope)=>{
+app.controller("loginCtrl",($scope,$state)=>{
+    // $state.go('home');
+    console.log('at login');
 
-
-    console.log(socket);
+    // console.log(socket);
     $scope.register = (email,pass)=>{
         console.log(email + pass);
         socket.emit("registerUser",email,pass);
 
-    }
+    };
 
     socket.on("registerError",(err)=>{
         alert(err);
@@ -100,12 +102,21 @@ app.controller("loginCtrl",($scope)=>{
 
 
     $scope.login = (email,pass)=>{
+        console.log(email + pass);
         socket.emit("loginUser",email,pass);
     };
 
-    socket.on("redirect",(user)=>{
-        console.log(user);
-        window.location = "http://localhost:3000/#!/";
+    socket.on("redirectToInbox",(user)=>{
+        // console.log(user);
+        $state.go('home');
+        // window.location = "http://localhost:3000/#!/";
+    });
+
+    socket.on("redirectToLogin",(user)=>{
+        // console.log(user);
+        console.log('2');
+        $state.go('login');
+        // window.location = "http://localhost:3000/#!/";
     });
 
 });
@@ -114,10 +125,24 @@ app.controller("loginCtrl",($scope)=>{
 
 
 app.controller("chatCtrl",($scope, $stateParams, messageService,$state)=>{
-    console.log(socket);
+    // console.log(socket);
+    socket.emit("getUser");
+    // $state.go('login');
+
+    socket.emit("retrieveInfo");
 
     // $state.go('inbox');
     // console.log('c1 loaded');
+    socket.on("redirectToLogin1",()=>{
+        // console.log(user);
+        console.log('1');
+        $state.go('login');
+        // window.location = "http://localhost:3000/#!/";
+    });
+
+    $scope.logout = ()=>{
+        socket.emit("logoutUser");
+    };
 
     $scope.rname = '';
     $scope.inputMessage = '';

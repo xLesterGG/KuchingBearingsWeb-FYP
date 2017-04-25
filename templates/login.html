@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en" data-ng-app="myApp">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -6,10 +6,10 @@
         <script src="/socket.io/socket.io.js"></script>
     </head>
 
-    <body>
+    <body> -->
 
         <div data-ng-controller="loginCtrl" class="container">
-            <input type="text" data-ng-model="email"/>
+             <input type="text" data-ng-model="email"/>
             <input type="password" data-ng-model="pass"/>
 
             <button type="button" data-ng-click="register(email,pass)">ASDADASD</button>
@@ -19,16 +19,37 @@
             <input type="password" data-ng-model="apass" />
             <button type="button" data-ng-click="login(aemail,apass)">ASDADASD</button>
 
+            <div class="card card-container">
+                <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+                <p id="profile-name" class="profile-name-card"></p>
+                <form class="form-signin" data-ng-submit="login(email,pass)">
+                    <span id="reauth-email" class="reauth-email"></span>
+                    <input type="email" id="inputEmail" data-ng-model="email" class="form-control" placeholder="Email address" required autofocus>
+                    <input type="password" id="inputPassword" data-ng-model="pass" class="form-control" placeholder="Password" required>
+                    <div id="remember" class="checkbox">
+                        <label>
+                            <input type="checkbox" value="remember-me"> Remember me
+                        </label>
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                    <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" data-ng-click="login(email,pass)">Sign in</button>
+
+                </form>
+                <a href="#" class="forgot-password">
+                    Forgot the password?
+                </a>
+            </div>
+
 
         </div>
 
 
-        <script src="/js/jquery.js"></script>
+        <!-- <script src="/js/jquery.js"></script>
         <script src="/js/bootstrap.js"></script>
         <script src="/js/angular.js"></script>
         <script src="/js/angular-ui-router.js"></script>
         <script src="/js/controller.js"></script>
-        <script src="/js/firebase.js"></script>
+        <script src="/js/firebase.js"></script> -->
 
-    </body>
-</html>
+    <!-- </body>
+</html> -->

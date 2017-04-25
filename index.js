@@ -56,10 +56,10 @@ app.get('/',(req,res)=>{
 });
 
 
-app.get('/login',(req,res)=>{
-    // res.send('hello');
-    res.sendFile(__dirname +'/login.html');
-});
+// app.get('/login',(req,res)=>{
+//     // res.send('hello');
+//     res.sendFile(__dirname +'/login.html');
+// });
 
 
 server.listen(3000,"localhost");
@@ -82,89 +82,103 @@ var c = database.ref('/conversations/'); // to receive incoming messages and upd
 
 
 socket.on("connection",(client)=>{
+    var currentUser;
 
-    a.on('value',function(res){
-        // console.log('loaded / new inquiry');
-        for(var r in res.val()){
-             inquiries[r] = res.val()[r];
+    client.on("getUser",()=>{
+        if(currentUser == undefined){
+            client.emit("redirectToLogin1");
         }
-
-        ready = true;
-        socket.sockets.emit("updateInquiryList",inquiries);
     });
 
-    database.ref('/conversations').once('value').then((res)=>{ // retrieve once client is connected
-        console.log('get once');
-        if(res.val() != null ){
+
+    client.on("retrieveInfo",()=>{
+        console.log('retrieving');
+
+        a.on('value',function(res){
+            // console.log('loaded / new inquiry');
+            for(var r in res.val()){
+                 inquiries[r] = res.val()[r];
+            }
+
+            ready = true;
+            socket.sockets.emit("updateInquiryList",inquiries);
+        });
+
+        database.ref('/conversations').once('value').then((res)=>{ // retrieve once client is connected
+            console.log('get once');
+            if(res.val() != null ){
+                for(var key in res.val()){
+                    conversations[key] = res.val()[key];
+                }
+
+                for(var k in conversations){
+                  for(var j in conversations[k]){
+                    var temp = conversations[k][j];
+                    temp.inquiryID = k;
+                    client.emit("loadMessage",temp);
+                    // socket.sockets.emit("loadMessage",temp);
+
+                    // console.log (temp.messageText);
+                  }
+                }
+
+                isReady = true;
+            }
+            else{
+                //something to say no enquiries yet
+                isReady = true;
+            }
+        });
+
+        b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message), create new entry in associative array
+            // console.log('child added')
+            if(isReady){
+                // console.log(res.val())
+                // console.log(res.key);
+
+                if(conversations[res.key] == undefined)
+                {
+                    conversations[res.key] = {};
+                    for(var k in res.val()){
+
+                        // console.log(res.val()[k]);
+                        conversations[res.key][k] = res.val()[k];
+                        var temp = conversations[res.key][k];
+                        temp.inquiryID = res.key;
+                        console.log('temp is');
+                        console.log(temp);
+                        // console.log('key is ' + key);
+                        client.emit("recieveMessage",temp)
+                        // socket.sockets.emit("recieveMessage",temp);
+
+                    }
+                }
+
+            }
+        });
+
+        c.on('child_changed',(res)=>{
+            // console.log('child changed')
+            var l = Object.keys(conversations[res.key]).length;
+            var c = 0;
+
             for(var key in res.val()){
-                conversations[key] = res.val()[key];
-            }
-
-            for(var k in conversations){
-              for(var j in conversations[k]){
-                var temp = conversations[k][j];
-                temp.inquiryID = k;
-                client.emit("loadMessage",temp);
-                // socket.sockets.emit("loadMessage",temp);
-
-                // console.log (temp.messageText);
-              }
-            }
-
-            isReady = true;
-        }
-        else{
-            //something to say no enquiries yet
-            isReady = true;
-        }
-    });
-
-    b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message), create new entry in associative array
-        // console.log('child added')
-        if(isReady){
-            // console.log(res.val())
-            // console.log(res.key);
-
-            if(conversations[res.key] == undefined)
-            {
-                conversations[res.key] = {};
-                for(var k in res.val()){
-
-                    // console.log(res.val()[k]);
-                    conversations[res.key][k] = res.val()[k];
-                    var temp = conversations[res.key][k];
-                    temp.inquiryID = res.key;
-                    console.log('temp is');
-                    console.log(temp);
-                    // console.log('key is ' + key);
-                    client.emit("recieveMessage",temp)
-                    // socket.sockets.emit("recieveMessage",temp);
+                c++;
+                if(c > l){
+                    console.log('new message')
+                    conversations[res.key][key] = (res.val()[key]);
+                    var temp = res.val()[key];
+                    temp.inquiryID = res.key
+                    // client.emit("recieveMessage",temp)
+                    socket.sockets.emit("recieveMessage",temp);
 
                 }
             }
 
-        }
+        });
     });
 
-    c.on('child_changed',(res)=>{
-        // console.log('child changed')
-        var l = Object.keys(conversations[res.key]).length;
-        var c = 0;
 
-        for(var key in res.val()){
-            c++;
-            if(c > l){
-                console.log('new message')
-                conversations[res.key][key] = (res.val()[key]);
-                var temp = res.val()[key];
-                temp.inquiryID = res.key
-                // client.emit("recieveMessage",temp)
-                socket.sockets.emit("recieveMessage",temp);
-
-            }
-        }
-
-    });
 
     // console.log('count is'+ socket.engine.clientsCount);
 
@@ -226,10 +240,7 @@ socket.on("connection",(client)=>{
                 }
             }
         }else{
-            // console.log('elese undefined');
-            // alert('Error: Room might not exist, please refresh!');
-            // var queryHandler = require('special_query_handler');
-            // app.get('/');
+
             //some error here
         }
 
@@ -378,14 +389,39 @@ socket.on("connection",(client)=>{
         });
 
         firebase.auth().onAuthStateChanged(user => {
-            if(user) {
+            if(user!=undefined) {
+                console.log('logged in');
             // window.location = 'home.html'; //After successful login, user will be redirected to home.html
-
-                client.emit("redirect",user);
+                currentUser = user;
+                client.emit("redirectToInbox",user);
+            }else{
+                console.log('logged out');
+                client.emit("redirectToLogin1");
             }
         });
+
+
     });
 
+    firebase.auth().onAuthStateChanged(user => {
+        if(user!=undefined) {
+            console.log('logged in');
+        // window.location = 'home.html'; //After successful login, user will be redirected to home.html
+            currentUser = user;
+            client.emit("redirectToInbox",user);
+        }else{
+            console.log('logged out');
+            client.emit("redirectToLogin1");
+        }
+    });
+
+    client.on("logoutUser",()=>{
+        firebase.auth().signOut().then(function() {
+          // Sign-out successful.
+        }, function(error) {
+          // An error happened.
+        });
+    });
 
 
 
