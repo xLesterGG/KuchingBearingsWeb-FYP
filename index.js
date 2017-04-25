@@ -14,14 +14,24 @@ var uuid = require('node-uuid');
 //     messagingSenderId: "772760457598"
 // };
 
+// var config = {
+//     apiKey: "AIzaSyBgaYoTGGIx-XX84lp8zrvgOI1_SFm6iaM",
+//     authDomain: "kuching-bearings.firebaseapp.com",
+//     databaseURL: "https://kuching-bearings.firebaseio.com",
+//     projectId: "kuching-bearings",
+//     storageBucket: "kuching-bearings.appspot.com",
+//     messagingSenderId: "630426422934"
+//   };
+
 var config = {
-    apiKey: "AIzaSyBgaYoTGGIx-XX84lp8zrvgOI1_SFm6iaM",
-    authDomain: "kuching-bearings.firebaseapp.com",
-    databaseURL: "https://kuching-bearings.firebaseio.com",
-    projectId: "kuching-bearings",
-    storageBucket: "kuching-bearings.appspot.com",
-    messagingSenderId: "630426422934"
+    apiKey: "AIzaSyAs4US9O4tjsC_DZdcgmbPT3D0Xd179od4",
+    authDomain: "kuchingbearings.firebaseapp.com",
+    databaseURL: "https://kuchingbearings.firebaseio.com",
+    projectId: "kuchingbearings",
+    storageBucket: "kuchingbearings.appspot.com",
+    messagingSenderId: "1033971329142"
   };
+
 
 
 
@@ -376,7 +386,7 @@ socket.on("connection",(client)=>{
           console.log(errorCode);
           console.log(errorMessage);
 
-          client.emit("registerError",errorMessage);
+          client.emit("errorMsg",errorMessage);
         });
     });
 
@@ -386,6 +396,16 @@ socket.on("connection",(client)=>{
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
+
+          if(errorCode == 'auth/wrong-password'){
+              client.emit("errorMsg","Wrong password, please try again");
+          }else if(errorCode == 'auth/user-not-found'){
+              client.emit("errorMsg","No such account, please try again");
+          }else{
+              client.emit("errorMsg",errorMessage);
+          }
+        //   console.log(errorCode);
+
         });
 
         firebase.auth().onAuthStateChanged(user => {
@@ -421,6 +441,16 @@ socket.on("connection",(client)=>{
         }, function(error) {
           // An error happened.
         });
+    });
+
+    client.on("resetPassword",(email)=>{
+        firebase.auth().sendPasswordResetEmail(email).then(function() {
+            client.emit("resetSuccessful","Reset email sent successfully");
+          // Email sent.
+        }, function(error) {
+          // An error happened.
+        });
+
     });
 
 

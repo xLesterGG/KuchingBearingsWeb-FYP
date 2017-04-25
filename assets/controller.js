@@ -89,6 +89,8 @@ app.controller("loginCtrl",($scope,$state)=>{
     // $state.go('home');
     console.log('at login');
 
+    $scope.showlogin = true;
+
     // console.log(socket);
     $scope.register = (email,pass)=>{
         console.log(email + pass);
@@ -96,7 +98,11 @@ app.controller("loginCtrl",($scope,$state)=>{
 
     };
 
-    socket.on("registerError",(err)=>{
+    $scope.resetPassword = (email)=>{
+        socket.emit("resetPassword",email);
+    };
+
+    socket.on("errorMsg",(err)=>{
         alert(err);
     });
 
@@ -105,6 +111,12 @@ app.controller("loginCtrl",($scope,$state)=>{
         console.log(email + pass);
         socket.emit("loginUser",email,pass);
     };
+
+    socket.on("resetSuccessful",(mess)=>{
+        alert(mess);
+        location.reload();
+
+    });
 
     socket.on("redirectToInbox",(user)=>{
         // console.log(user);
