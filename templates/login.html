@@ -24,7 +24,7 @@
                 <p id="profile-name" class="profile-name-card"></p>
 
                 <div data-ng-show="showlogin">
-                    <form class="form-signin" data-ng-submit="login(email,pass)" >
+                    <form class="form-signin" data-ng-submit="login(email,pass)">
                         <span id="reauth-email" class="reauth-email"></span>
                         <input type="email" id="inputEmail" data-ng-model="email" class="form-control" placeholder="Email address" required autofocus>
                         <input type="password" id="inputPassword" data-ng-model="pass" class="form-control" placeholder="Password" required>
@@ -46,10 +46,14 @@
                     <p>
                         Please enter your email address to reset your password.
                     </p>
-                    <input type="email" data-ng-model="email" class="form-control" placeholder="Email address" required autofocus>
-                    <br />
 
-                    <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" data-ng-click="resetPassword(email)">Reset password</button>
+                    <form data-ng-submit="resetPassword(email)">
+                        <input type="email" data-ng-model="email" class="form-control" placeholder="Email address" required autofocus>
+                        <br />
+
+                        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Reset password</button>
+                    </form>
+
                 </div>
 
 
