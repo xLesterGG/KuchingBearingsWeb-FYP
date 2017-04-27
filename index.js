@@ -228,7 +228,8 @@ socket.on("connection",(client)=>{
                             inquiryName:inq.inquiryName,
                             inquiryID:inq.inquiryID,
                             inquiryOwner: inq.inquiryOwner,
-                            lastMessage: msg
+                            lastMessage: msg,
+                            bearings: inq.bearings
                         }
 
                         var update = {};
@@ -240,7 +241,8 @@ socket.on("connection",(client)=>{
                             inquiryPeoples: inq.inquiryPeoples,
                             inquiryName:inq.inquiryName,
                             inquiryID:inq.inquiryID,
-                            inquiryOwner: inq.inquiryOwner
+                            inquiryOwner: inq.inquiryOwner,
+                            bearings: inq.bearings
                         }
 
                         var update = {};
@@ -308,7 +310,8 @@ socket.on("connection",(client)=>{
                         inquiryID:inq.inquiryID,
                         inquiryOwner: inq.inquiryOwner,
                         lastMessage: msg,
-                        msgUnreadCountForMobile: unread
+                        msgUnreadCountForMobile: unread,
+                        bearings : inq.bearings
                     }
 
                     var update = {};
@@ -338,7 +341,8 @@ socket.on("connection",(client)=>{
                 inquiryName:inq.inquiryName,
                 inquiryID:inq.inquiryID,
                 inquiryOwner: inq.inquiryOwner,
-                lastMessage: msg
+                lastMessage: msg,
+                bearings:inq.bearings
             }
 
             var update = {};
@@ -366,7 +370,8 @@ socket.on("connection",(client)=>{
                 inquiryName:inq.inquiryName,
                 inquiryID:inq.inquiryID,
                 inquiryOwner: inq.inquiryOwner,
-                lastMessage: msg
+                lastMessage: msg,
+                bearings:inq.bearings
             }
 
             var update = {};
