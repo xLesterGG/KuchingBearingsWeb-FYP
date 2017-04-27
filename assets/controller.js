@@ -83,7 +83,7 @@ app.service('messageService',function() {
 });
 
 var socket= io.connect("http://localhost:3000");
-console.log('loading angular');
+// console.log('loading angular');
 
 app.controller("loginCtrl",($scope,$state)=>{
     // $state.go('home');
@@ -237,9 +237,11 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state)=>{
 });
 
 app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
-    console.log('c 2 loaded');
+    // console.log('c 2 loaded');
     $scope.chatID = $stateParams.id; //get chat id
     $scope.messages = messageService.getMessage(); //get messages
+
+    console.log($scope.messages);
 
 
     $scope.updateFilter = ()=>{

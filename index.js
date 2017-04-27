@@ -141,10 +141,7 @@ socket.on("connection",(client)=>{
         });
 
         b.on('child_added',(res)=>{ // when a new chat is created (called when person in new room sends message), create new entry in associative array
-            // console.log('child added')
             if(isReady){
-                // console.log(res.val())
-                // console.log(res.key);
 
                 if(conversations[res.key] == undefined)
                 {
@@ -426,19 +423,7 @@ socket.on("connection",(client)=>{
         });
 
 
-    });
-
-    firebase.auth().onAuthStateChanged(user => {
-        if(user!=undefined) {
-            console.log('logged in');
-        // window.location = 'home.html'; //After successful login, user will be redirected to home.html
-            currentUser = user;
-            client.emit("redirectToInbox",user);
-        }else{
-            console.log('logged out');
-            client.emit("redirectToLogin1");
-        }
-    });
+    });    
 
     client.on("logoutUser",()=>{
         firebase.auth().signOut().then(function() {
