@@ -1,0 +1,82 @@
+<html lang="en" data-ng-app="myApp">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <script src="/socket.io/socket.io.js"></script>
+
+    </head>
+    <body>
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container nav">
+          <div class="navbar-header">
+            <button type="button?" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#MenuOnTop" aria-expended="false">
+              <span class="sr-only"> Toggle Navigation </span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"> KuchingBearingsOS </a>
+          </div>
+
+          <div class="collapse navbar-collapse" id="MenuOnTop">
+            <ul class="nav navbar-nav">
+
+              <li><a href="#"> Admin </a></li>
+
+              <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    Inbox <span class="caret"></span>
+                  </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#"> Read </a></li>
+                      <li><a href="#"> Unread </a> </li>
+                      <li><a href="#"> Paid </a></li>
+                    </ul>
+              </li>
+
+              <li><a href="#"> History </a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="#">Log Out </a></li>
+            </ul>
+
+          </div>
+        </div>
+      </nav>
+        <div data-ng-controller="chatCtrl" class="container" >
+            <div id="con">
+                <div class="row" id="box">
+                    <!-- <div class="col-md-2 col-lg-2" id="navbar">
+                        <ul class="nav nav-list">
+                            <li ui-sref-active="active"><a data-ui-sref="admin"> Admin </a></li>
+
+                            <li ui-sref-active="active"> <a data-ui-sref="inbox"> Inbox </a></li>
+
+                              <li ui-sref-active="active">  <a data-ui-sref="inbox.Read" style="font-size:15px; padding-left: 30px; font-weight:500;"> Read </a> </li>
+
+                              <li ui-sref-active="active">  <a data-ui-sref="inbox.Unread" style="font-size:15px; padding-left: 30px; font-weight:500;"> Unread </a> </li>
+
+                              <li ui-sref-active="active">  <a data-ui-sref="inbox.Paid" style="font-size:15px; padding-left: 30px; font-weight:500;"> Paid </a> </li>
+
+                            <li ui-sref-active="active"> <a data-ui-sref="history"> History </a> </li>
+                            <li> <a href="/">Home</a> </li>
+                        </ul>
+                    </div> -->
+
+                    <div class="col-md-10 col-lg-10">
+                        <div ui-view></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/jquery.js"></script>
+        <script src="/js/bootstrap.js"></script>
+        <script src="/js/angular.js"></script>
+        <script src="/js/angular-ui-router.js"></script>
+        <script src="/js/controller.js"></script>
+    </body>
+</html>

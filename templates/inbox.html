@@ -1,18 +1,6 @@
-<div class="row" >
-    <div class="col-md-5 second" id="cont">
+    <div class="col-md-3" id="cont">
         <h1 id="head"> Inbox </h1>
         <div id="inqs">
-            <!-- <div class="list-group">
-                <a data-ng-repeat="inq in allInquiryList track by $index" class="list-group-item list-group-item-action" data-ui-sref="inbox.chat({id: inq.inquiryID})">
-
-                    <div class="d-flex w-100 justify-content-between">
-                        <p class="mb-1">{{inq.inquiryID}}
-                        <small>3 days ago</small> </p>
-                    </div>
-
-                    <p class="mb-1">simple preview</p>
-                </a>
-            </div> -->
             <ul class="people" >
                 <li class="person" data-ng-repeat="inq in allInquiryList track by $index" data-chat="person{{$index}}" ui-sref-active="active" data-ui-sref="home.inbox.chat({id: inq.inquiryID})" data-ng-click="updateRead(inq)">
 
@@ -33,16 +21,12 @@
                     <div data-ng-show="inq.lastMessage.messageRead==true || inq.lastMessage.messageUser=='admin'">
                         <span class="preview">{{inq.lastMessage.messageText}}</span>
                     </div>
-
                 </li>
             </ul>
-
-
         </div>
-
     </div>
 
-    <div class="col-md-7 col-lg-7">
+    <div class="col-md-9 col-lg-9 chats">
         <div data-ui-view >
             <!-- <p align="center" style="padding-top: 150px;">
                 Click on one of the conversations on the left
@@ -69,5 +53,3 @@
             });
         });
     </script>
-
-</div>

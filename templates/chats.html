@@ -1,45 +1,8 @@
-<div class="row" >
-    <div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter()" class="col-md-12 third" >
+    <div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter(); autojoinRoom()" >
 
-        <div>
-          <div class="row" id="informations" style="">
-            <div class="col-md-7 infoI">
-              <p>
-                <!-- <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt="" /> -->
-                <table>
-                  <tr>
-                    <td>Bearing Code</td>
-                    <td>:</td>
-                    <td>ABC12345D</td>
-                  </tr>
-                  <tr>
-                    <td>Width</td>
-                    <td>:</td>
-                    <td>400mm</td>
-                  </tr>
-                  <tr>
-                    <td>Diameter (I)</td>
-                    <td>:</td>
-                    <td>400mm</td>
-                  </tr>
-                  <tr>
-                    <td>Diameter (O)</td>
-                    <td>:</td>
-                    <td>400mm</td>
-                  </tr>
-                </table>
-              </p>
-            </div>
-            <div class="col-md-5 infoC">
-              <p style="font-size:18px; font-weight:600;">Customer Sdn Bhd</p>
-              <p> &#9743; 012-345 6789 / 082-123 456 <br>
-                  &#9993; Customer@customer.com </p>
-            </div>
-          </div>
-        </div>
 
-        <div>
-            <div class="row" data-ng-init="autojoinRoom()">
+
+        <div class="col-md-9">
                 <div id="convo" data-ng-model="convo">
                     <div data-ng-repeat="msg in messages |filter: filterR track by $index">
 
@@ -58,7 +21,6 @@
                     </div>
 
                 </div>
-
                 <div id="sMsg">
                     <form ng-submit="sendMessage2()">
 
@@ -75,10 +37,55 @@
                         <!-- <button type="button" data-ng-click="sendMessage2()" class="btn btn-primary btn-md">Send</button> -->
                     </form>
                 </div>
-            </div>
         </div>
 
+        <div class="col-md-3">
+          <div class="info">
+              <div class="custInfos">
+                <p style="font-size:18px; font-weight:600;">Customer Sdn Bhd</p>
+                <p> &#9743; 012-345 6789 / 082-123 456 <br>
+                    &#9993; Customer@customer.com </p>
+              </div>
 
+              <h3 style="border-bottom: 1px solid #e6e6e6;"> Inquiries </h3>
+              <!-- ng-repeat inquiries -->
+              <div class="inqInfos">
+                <div class="inqInfo">
+                    <p><strong>Bearing Code : ABC12345D</strong> <br>
+                        Height : 400mm <br>
+                        Diameter (I) : 400mm <br>
+                        Diameter (O) : 400mm <br>
+                        Quantity : 5
+                    </p>
+                </div>
+
+                <div class="inqInfo">
+                    <p><strong>Bearing Code : ABC12345D</strong> <br>
+                        Height : 400mm <br>
+                        Diameter (I) : 400mm <br>
+                        Diameter (O) : 400mm <br>
+                        Quantity : 5
+                    </p>
+                </div>
+
+                <div class="inqInfo">
+                    <p><strong>Bearing Code : ABC12345D</strong> <br>
+                        Height : 400mm <br>
+                        Diameter (I) : 400mm <br>
+                        Diameter (O) : 400mm <br>
+                        Quantity : 5
+                    </p>
+                </div>
+              </div>
+
+              <!-- Quotation module -->
+              <div class="quotation">
+                <button type="button" class="btn btn-primary btn-block"> Send Quotation </button>
+                <ul>
+                  <li> Quotation 1 </li>
+                </ul>
+              </div>
+
+          </div>
+        </div>
     </div>
-
-</div>
