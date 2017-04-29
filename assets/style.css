@@ -9,7 +9,7 @@ body{
   margin-left: 0px;
   margin-right: 0px !important;
   padding-right: 0px;
-  width: 100%;
+  width: 98%;
 }
 
 #box{
@@ -414,11 +414,13 @@ body {
   padding-left: 5px;
   height: 70vh;
   max-height: 70vh;
+  width: 280px;
   max-width: inherit;
 }
 
 .custInfos{
   border-bottom: 1px solid #e6e6e6;
+  width: 280px;
   float: left;
 }
 
@@ -426,10 +428,21 @@ body {
   overflow: auto;
   overflow-x: hidden;
   height: 280px;
+  width: 280px;
   float: left;
 }
+
 .inqInfo{
   border-bottom: 1px solid #e6e6e6;
+}
+
+.inqInfo img{
+  float: left;
+  width: 40px;
+  height: 40px;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
 }
 
 .quotation{
