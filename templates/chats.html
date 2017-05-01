@@ -1,95 +1,234 @@
-    <div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter(); autojoinRoom()" >
+<div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter(); autojoinRoom()" >
+    <!-- {{chatID}} -->
 
 
+    <div class="col-md-8 conversation">
+        <div id="convo" data-ng-model="convo">
+            <div data-ng-repeat="msg in messages |filter: filterR track by $index">
 
-        <div class="col-md-8 conversation">
-                <div id="convo" data-ng-model="convo">
-                    <div data-ng-repeat="msg in messages |filter: filterR track by $index">
+                <div ng-show="msg.messageUser!='admin'">
+                    <div class="bubble you">
+                        {{msg.messageText}}
+                    </div>
+                </div>
 
-                        <div ng-show="msg.messageUser!='admin'">
-                            <div class="bubble you">
-                                {{msg.messageText}}
+                <div ng-show="msg.messageUser=='admin'">
+                    <div class="bubble me">
+                        {{msg.messageText}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sMsg">
+            <form ng-submit="sendMessage2()">
+
+                <div class="write">
+                    <!-- <input type="text" data-ng-model="inputMessage" class="form-control" /> -->
+                    <a href="javascript:;" class="write-link attach"></a>
+                    <input data-ng-click="updateRead()" type="text" data-ng-model="inputMessage"/>
+                    <a href="javascript:;" class="write-link smiley"></a>
+                    <a href="javascript:;" class="write-link send"></a>
+
+                </div>
+
+
+                <!-- <button type="button" data-ng-click="sendMessage2()" class="btn btn-primary btn-md">Send</button> -->
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="info">
+            <div class="custInfos">
+                <p style="font-size:20px; font-weight:600;">Customer Sdn Bhd</p>
+                <p> &#9743; 012-345 6789 / 082-123 456 <br>
+                &#9993; Customer@customer.com <br>
+                NO123 LOT321 LORONG YOUR HOUSE
+                </p>
+            </div>
+
+            <h3 style="border-bottom: 1px solid #e6e6e6;"> Bearings </h3>
+            <!-- ng-repeat inquiries -->
+            <div class="inqInfos">
+                <div class="inqInfo">
+                    <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt=""/>
+                    <p><br><strong>Bearing Code : ABC12345D</strong> <br>
+                    Height : 400mm <br>
+                    Diameter (I) : 400mm <br>
+                    Diameter (O) : 400mm <br>
+                    Quantity : 5
+                    </p>
+                </div>
+
+                <div class="inqInfo">
+                    <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt=""/>
+                    <p><br><strong>Bearing Code : ABC12345D</strong> <br>
+                    Height : 400mm <br>
+                    Diameter (I) : 400mm <br>
+                    Diameter (O) : 400mm <br>
+                    Quantity : 5
+                    </p>
+                </div>
+
+                <div class="inqInfo">
+                    <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt=""/>
+                    <p><br><strong>Bearing Code : ABC12345D</strong> <br>
+                    Height : 400mm <br>
+                    Diameter (I) : 400mm <br>
+                    Diameter (O) : 400mm <br>
+                    Quantity : 5
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quotation module -->
+
+            <div class="quotation" data-ng-repeat="inq in allInquiryList|customFilter:chatID">
+
+                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal{{$index}}" > Send Quotation </button>
+
+                <div id="myModal{{$index}}" class="modal fade" role="dialog">
+
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Quotation</h4>
                             </div>
-                        </div>
 
-                        <div ng-show="msg.messageUser=='admin'">
-                            <div class="bubble me">
-                                {{msg.messageText}}
+                            <div class="modal-body" >
+                                <!-- <ul style="list-style:none"
+                                    <li data-ng-repeat="x in inq.bearings track by $index">
+                                        <input type="checkbox" data-ng-model="bearing" ng-change="updateSelected('{{x.serialNo}}')"> {{x.serialNo}}
+
+                                    </li>
+                                </ul> -->
+
+                                <!-- Selected -->
+
+
+                                <table class="table" align="center">
+                                    <tr>
+                                        <th>
+                                            #
+                                        </th>
+
+                                        <th>
+                                            Serial Number
+                                        </th>
+
+                                        <th>
+                                            Quantity
+                                        </th>
+
+                                        <th>
+                                            Price/ unit
+                                        </th>
+
+                                        <th>
+                                            Total
+                                        </th>
+
+                                        <th>
+
+                                        </th>
+                                    </tr>
+
+                                    <tr ng-repeat="s in inq.bearings">
+                                        <!-- {{s}} -->
+                                        <td>
+                                            {{$index+1}}
+                                        </td>
+
+                                        <td>
+                                            <!-- {{$index}} -->
+                                            <!-- <input type="text" class="form-control no-border" data-ng-model="bearing[$index]" value="{{s.serialNo}}"/> -->
+                                            <input type="text" class="form-control no-border input-sm" data-ng-init="bearing[$index]='{{s.serialNo}}'" data-ng-model="bearing[$index]" value="{{s.serialNo}}" value="0" ng-change="getTotal();"/>
+                                            <!-- {{s.serialNo}} -->
+                                        </td>
+                                        <td>
+                                            <input type="number" style="width:5vw" class="input-sm form-control no-border" data-ng-model="quantity[$index]" size="1" data-ng-init="quantity[$index]=0" />
+                                        </td>
+
+                                        <td>
+                                            <input type="number"  style="width:5vw" class="input-sm form-control no-border" data-ng-model="ppu[$index]" data-ng-init="ppu[$index] = 0" size="1" ng-change="getTotal();"/>
+                                        </td>
+
+                                        <td>
+                                            <!-- <div data-ng-if="if(quantity[$index]*ppu[$index])== NaN">
+                                                is NAN
+                                            </div> -->
+                                            <span data-ng-model="total[$index]">
+                                                {{quantity[$index]*ppu[$index] | currency:'RM '}}
+                                            </span>
+
+                                            <!-- {{total[$index]}} -->
+                                            <!-- <input type="text" data-ng-init="total[$index]= '{{quantity[$index]*ppu[$index]}}'"
+                                            data-ng-model="total[$index]" disabled class="form-control no-border input-sm"  value="{{quantity[$index]*ppu[$index]}}"/> -->
+
+                                            <!-- {{quantity[$index]*ppu[$index] | currency:'RM'}} -->
+                                        </td>
+
+                                        <td>
+                                            <a style="text-decoration:none" class="glyphicon glyphicon-remove" data-ng-click="removeRow($index);" aria-hidden="true"></a>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+
+                                        <td>
+                                            {{total|currency:"RM "}}
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+
+                                </table>
+
+                                <button type="button" class="btn btn-md" data-ng-click="addRow()">Add Row</button>
+
+                                <!-- <ul>
+                                    <li ng-repeat="s in selected">
+                                        {{s}}
+                                    </li>
+
+                                </ul> -->
+
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
                         </div>
 
                     </div>
 
                 </div>
-                <div id="sMsg">
-                    <form ng-submit="sendMessage2()">
-
-                        <div class="write">
-                            <!-- <input type="text" data-ng-model="inputMessage" class="form-control" /> -->
-                            <a href="javascript:;" class="write-link attach"></a>
-                            <input data-ng-click="updateRead()" type="text" data-ng-model="inputMessage"/>
-                            <a href="javascript:;" class="write-link smiley"></a>
-                            <a href="javascript:;" class="write-link send"></a>
-
-                        </div>
 
 
-                        <!-- <button type="button" data-ng-click="sendMessage2()" class="btn btn-primary btn-md">Send</button> -->
-                    </form>
-                </div>
-        </div>
-        <div class="col-md-4">
-          <div class="info">
-              <div class="custInfos">
-                <p style="font-size:20px; font-weight:600;">Customer Sdn Bhd</p>
-                <p> &#9743; 012-345 6789 / 082-123 456 <br>
-                    &#9993; Customer@customer.com <br>
-                    NO123 LOT321 LORONG YOUR HOUSE
-                  </p>
-              </div>
 
-              <h3 style="border-bottom: 1px solid #e6e6e6;"> Inquiries </h3>
-              <!-- ng-repeat inquiries -->
-              <div class="inqInfos">
-                <div class="inqInfo">
-                  <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt=""/>
-                    <p><br><strong>Bearing Code : ABC12345D</strong> <br>
-                        Height : 400mm <br>
-                        Diameter (I) : 400mm <br>
-                        Diameter (O) : 400mm <br>
-                        Quantity : 5
-                    </p>
-                </div>
-
-                <div class="inqInfo">
-                  <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt=""/>
-                    <p><br><strong>Bearing Code : ABC12345D</strong> <br>
-                        Height : 400mm <br>
-                        Diameter (I) : 400mm <br>
-                        Diameter (O) : 400mm <br>
-                        Quantity : 5
-                    </p>
-                </div>
-
-                <div class="inqInfo">
-                  <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt=""/>
-                    <p><br><strong>Bearing Code : ABC12345D</strong> <br>
-                        Height : 400mm <br>
-                        Diameter (I) : 400mm <br>
-                        Diameter (O) : 400mm <br>
-                        Quantity : 5
-                    </p>
-                </div>
-              </div>
-
-              <!-- Quotation module -->
-              <div class="quotation">
-                <button type="button" class="btn btn-primary btn-block"> Send Quotation </button>
                 <ul>
-                  <li> Quotation 1 </li>
+                    <li> Quotation 1 </li>
                 </ul>
-              </div>
+            </div>
 
-          </div>
         </div>
     </div>
+</div>

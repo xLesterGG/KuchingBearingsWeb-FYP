@@ -95,7 +95,6 @@ app.controller("loginCtrl",($scope,$state)=>{
     $scope.register = (email,pass)=>{
         console.log(email + pass);
         socket.emit("registerUser",email,pass);
-
     };
 
     $scope.resetPassword = (email)=>{
@@ -147,8 +146,10 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state)=>{
     // console.log('c1 loaded');
     socket.on("redirectToLogin1",()=>{
         // console.log(user);
-        console.log('1');
-        $state.go('login');
+        // console.log('1');
+
+
+        // $state.go('login');
         // window.location = "http://localhost:3000/#!/";
     });
 
@@ -167,16 +168,6 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state)=>{
     // socket.emit("join", 'asdf');
     $scope.hideName = true;
     $scope.hideRoom = false;
-
-
-
-    // $scope.joinServer = (username)=>{
-    //
-    //     console.log(username);
-    //     socket.emit("join", username);
-    //     $scope.hideName = true;
-    //     $scope.hideRoom = false;
-    // };
 
     socket.on("loadMessage",(msg)=>{
         // var message = {};
@@ -234,14 +225,52 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state)=>{
     };
 
 
+
+
 });
 
 app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
     // console.log('c 2 loaded');
+
     $scope.chatID = $stateParams.id; //get chat id
     $scope.messages = messageService.getMessage(); //get messages
 
-    console.log($scope.messages);
+    // console.log($scope.messages);
+
+    $scope.ppu = [];
+    $scope.quantity = [];
+    $scope.total = [];
+
+    $scope.getTotal = ()=>{
+        var l = $scope.ppu.length;
+        console.log('length is' + l);
+        var total = 0;
+        for(var i =0; i<l; i++)
+        {
+            // console.log($scope.ppu[i] +"*"+ $scope.quantity[i])
+            total = total + ($scope.ppu[i] * $scope.quantity[i]);
+        }
+
+        $scope.total = total;
+        // return total;
+    };
+
+    $scope.addRow = ()=>{
+        $scope.allInquiryList[$scope.chatID].bearings.push({});
+    };
+
+    $scope.removeRow= (index)=>{
+        if(index>-1)
+        {
+            $scope.allInquiryList[$scope.chatID].bearings.splice(index,1);
+            $scope.ppu.splice(index,1);
+            $scope.quantity.splice(index,1);
+            // $scope.total.splice(index,1);
+            console.log($scope.total);
+            // console.log($scope.allInquiryList[$scope.chatID].bearings);
+            $scope.getTotal();
+        }
+    };
 
 
     $scope.updateFilter = ()=>{
@@ -264,13 +293,24 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService)=>{
     };
 
     $scope.autojoinRoom = ()=>{
-        console.log($scope.chatID);
         socket.emit("joinRoom",$scope.chatID);
-    //   console.log("init");
     };
 
     $scope.updateRead = ()=>{
         socket.emit("updateLastRead2",$scope.chatID);
     };
 
+});
+
+app.filter('customFilter', function(){
+    return function (items,id) {
+        var filtered = [];
+        angular.forEach(items, function(item){
+            // console.log(id);
+            if (item.inquiryID === id){
+                filtered.push(item);
+            }
+        });
+        return filtered;
+    };
 });
