@@ -436,6 +436,42 @@ socket.on("connection",(client)=>{
         });
     });
 
+    client.on("sendQuote",(b,inq)=>{
+
+        if(inq.lastMessage != undefined){
+
+            var data = {
+                inquiryPeoples: inq.inquiryPeoples,
+                inquiryName:inq.inquiryName,
+                inquiryID:inq.inquiryID,
+                inquiryOwner: inq.inquiryOwner,
+                lastMessage: inq.lastMessage,
+                bearings: inq.bearings,
+                quotes: b
+            }
+
+            var update = {};
+            update['/inquiries/'+ inq.inquiryID] = data;
+            database.ref().update(update);
+        }
+        else{
+            var data = {
+                inquiryPeoples: inq.inquiryPeoples,
+                inquiryName:inq.inquiryName,
+                inquiryID:inq.inquiryID,
+                inquiryOwner: inq.inquiryOwner,
+                bearings: inq.bearings,
+                quotes: b
+            }
+
+            var update = {};
+            update['/inquiries/'+ inq.inquiryID] = data;
+            database.ref().update(update);
+        }
+
+
+    });
+
     client.on("resetPassword",(email)=>{
         firebase.auth().sendPasswordResetEmail(email).then(function() {
             client.emit("resetSuccessful","Reset email sent successfully");
