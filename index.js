@@ -75,7 +75,7 @@ app.get('/',(req,res)=>{
 // });
 
 
-server.listen(3000,"localhost");
+server.listen(80,"localhost");
 var socket = io.listen(server);
 var people = {};
 var inquiries = {};
@@ -130,8 +130,6 @@ socket.on("connection",(client)=>{
                     temp.inquiryID = k;
                     client.emit("loadMessage",temp);
                     // socket.sockets.emit("loadMessage",temp);
-
-                    // console.log (temp.messageText);
                   }
                 }
 
@@ -347,7 +345,7 @@ socket.on("connection",(client)=>{
 
             var update = {};
             update['/inquiries/'+ inq.inquiryID] = data;
-            database.ref().update(update);
+            // database.ref().update(update);
         }
 
 
@@ -440,29 +438,85 @@ socket.on("connection",(client)=>{
 
         if(inq.lastMessage != undefined){
 
-            var data = {
-                inquiryPeoples: inq.inquiryPeoples,
-                inquiryName:inq.inquiryName,
-                inquiryID:inq.inquiryID,
-                inquiryOwner: inq.inquiryOwner,
-                lastMessage: inq.lastMessage,
-                bearings: inq.bearings,
-                quotes: b
+            // var data = {
+            //     inquiryPeoples: inq.inquiryPeoples,
+            //     inquiryName:inq.inquiryName,
+            //     inquiryID:inq.inquiryID,
+            //     inquiryOwner: inq.inquiryOwner,
+            //     lastMessage: inq.lastMessage,
+            //     bearings: inq.bearings,
+            //     quotes: b
+            // }
+
+            if(inq.quotations!=undefined){
+                // console.log(Object.keys(inq.quotations[0]));
+                var c= inq.quotations;
+                c.push(b);
+                // console.log(c);
+
+
+                var data = {
+                    inquiryPeoples: inq.inquiryPeoples,
+                    inquiryName:inq.inquiryName,
+                    inquiryID:inq.inquiryID,
+                    inquiryOwner: inq.inquiryOwner,
+                    lastMessage: inq.lastMessage,
+                    bearings: inq.bearings,
+                    quotations: c
+                }
+
             }
+            else{
+                var temp = [];
+                temp.push(b);
+
+                var data = {
+                    inquiryPeoples: inq.inquiryPeoples,
+                    inquiryName:inq.inquiryName,
+                    inquiryID:inq.inquiryID,
+                    inquiryOwner: inq.inquiryOwner,
+                    lastMessage: inq.lastMessage,
+                    bearings: inq.bearings,
+                    quotations: temp
+                }
+            }
+
+
 
             var update = {};
             update['/inquiries/'+ inq.inquiryID] = data;
             database.ref().update(update);
         }
         else{
-            var data = {
-                inquiryPeoples: inq.inquiryPeoples,
-                inquiryName:inq.inquiryName,
-                inquiryID:inq.inquiryID,
-                inquiryOwner: inq.inquiryOwner,
-                bearings: inq.bearings,
-                quotes: b
+
+            if(inq.quotations!=undefined){
+                var c= inq.quotations;
+                c.push(b);
+
+                var data = {
+                    inquiryPeoples: inq.inquiryPeoples,
+                    inquiryName:inq.inquiryName,
+                    inquiryID:inq.inquiryID,
+                    inquiryOwner: inq.inquiryOwner,
+                    bearings: inq.bearings,
+                    quotations: c
+                }
+
             }
+            else{
+                var temp = [];
+                temp.push(b);
+
+                var data = {
+                    inquiryPeoples: inq.inquiryPeoples,
+                    inquiryName:inq.inquiryName,
+                    inquiryID:inq.inquiryID,
+                    inquiryOwner: inq.inquiryOwner,
+                    bearings: inq.bearings,
+                    quotations: temp
+                }
+            }
+
 
             var update = {};
             update['/inquiries/'+ inq.inquiryID] = data;

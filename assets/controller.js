@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-var socket= io.connect("http://localhost:3000");
+var socket= io.connect("http://localhost:80");
 
 app.controller("loginCtrl",($scope,$state)=>{
     // $state.go('home');
@@ -131,6 +131,8 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
 
         inqService.addInq(inquiryList);
         $scope.$apply();
+
+        console.log('updating inqs');
     });
 
     $scope.updateRead = (inq)=>{
@@ -146,6 +148,16 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
     $scope.chatID = $stateParams.id; //get chat id
     $scope.messages = messageService.getMessage(); //get messages
 
+    // $scope.allInq = inqService.getInq();
+
+    $scope.$watch(function() {
+        return inqService.getInq();
+    }, function(newContacts) {
+        // Do something with newContacts.
+        console.log('aaaa');
+        $scope.getInq();
+    });
+
     $scope.currentInq = {};
     $scope.bearing1= [];
     $scope.allInq = {};
@@ -159,8 +171,10 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
             $scope.bearing1.push($scope.currentInq['bearings'][i].serialNo);
         }
 
-        console.log($scope.bearing1);
+        // console.log($scope.bearing1);
     };
+
+    // inqService.registerObserverCallback($scope.getInq);
 
     $scope.updateBearings = (index,serial)=>{
         $scope.bearing1[index] = serial;
@@ -207,11 +221,15 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
         }
 
         $scope.tosend = {};
-        $scope.tosend.bearings = $scope.data;
+        $scope.tosend.quoteBearings = $scope.data;
         $scope.tosend.gTotal = $scope.gTotal;
 
         // console.log($scope.tosend);
+        // console.log($scope.currentInq);
+        console.log($scope.currentInq);
+        socket.emit("sendQuote",$scope.tosend,$scope.currentInq);
 
+        // $scope.getInq();
         // $scope.data.push()
         // console.log($scope.currentInq);
     };
@@ -341,6 +359,27 @@ $urlRouterProvider.otherwise("home");
 app.service('inqService', function() {
     var inqList = [];
 
+    // var observerCallbacks = [];
+    //
+    // //register an observer
+    // this.registerObserverCallback = function(callback){
+    //     observerCallbacks.push(callback);
+    // };
+    //
+    // //call this when you know 'foo' has been changed
+    // var notifyObservers = function(){
+    //     angular.forEach(observerCallbacks, function(callback){
+    //       callback();
+    //     });
+    // };
+    //
+    // //example of when you may want to notify observers
+    // this.foo = someNgResource.query().$then(function(){
+    //     notifyObservers();
+    // });
+
+
+
     var addInq = function(newObj) {
     //   inqList.push(newObj);
         inqList = newObj;
@@ -365,7 +404,7 @@ app.service('messageService',function() {
     };
 
     var getMessage = function(){
-    return messageConvo;
+        return messageConvo;
     };
 
     return {
