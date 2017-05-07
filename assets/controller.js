@@ -269,7 +269,8 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
             var toSend = {};
             toSend.dest = $scope.chatID;
             toSend.mess = $scope.inputMessage;
-            socket.emit("sendMessage",toSend);
+            socket.emit("sendMessage",toSend,$scope.currentInq.inquiryOwner);
+            // console.log($scope.currentInq.inquiryOwner)
             $scope.inputMessage = '';
         }
     };

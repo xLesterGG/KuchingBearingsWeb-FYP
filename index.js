@@ -257,7 +257,7 @@ socket.on("connection",(client)=>{
     });
 
 
-    client.on("sendMessage",(message)=>{ // message, room id,
+    client.on("sendMessage",(message,inqOwner)=>{ // message, room id,
         var inq = inquiries[message.dest]; // inquiry id
         console.log('sending');
 
@@ -291,7 +291,8 @@ socket.on("connection",(client)=>{
                         messageTime : parseInt(new Date().getTime()),
                         messageUser : msg.sender,
                         messageRead: false,
-                        messageID:uid
+                        messageID:uid,
+                        inquiryOwner:inqOwner
                     });
 
                     var msg = {
@@ -299,7 +300,8 @@ socket.on("connection",(client)=>{
                         messageTime : parseInt(new Date().getTime()),
                         messageUser : msg.sender,
                         messageRead: false,
-                        messageID:uid
+                        messageID:uid,
+                        inquiryOwner:inqOwner
                     }
 
                     var data = {
