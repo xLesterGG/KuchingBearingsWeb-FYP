@@ -2,7 +2,7 @@
         <h1 id="head"> Inbox </h1>
         <div id="inqs">
             <ul class="people" >
-                <li class="person" data-ng-repeat="inq in allInquiryList track by $index" data-chat="person{{$index}}" ui-sref-active="active" data-ui-sref="home.inbox.chat({id: inq.inquiryID})" data-ng-click="updateRead(inq)">
+                <li class="person" data-ng-repeat="inq in allInquiryList | orderObjectBy:'lastMesage.messageTime':true track by $index " data-chat="person{{$index}}" ui-sref-active="active" data-ui-sref="home.inbox.chat({id: inq.inquiryID})" data-ng-click="updateRead(inq)">
 
                 <!-- <li class="person" data-ng-repeat="inq in allInquiryList track by $index" data-chat="person{{$index}}" ui-sref-active="active"  data-ng-click="updateRead(inq)"> -->
 
