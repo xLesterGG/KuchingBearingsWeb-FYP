@@ -1,5 +1,25 @@
+
+
 <div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter(); autojoinRoom();getInq();" >
     <!-- {{chatID}} -->
+
+    <!-- <div class="row">
+        <div class="col-md-8">
+            <md-toolbar>
+            <div class="md-toolbar-tools">
+              <span>My App's Title</span>
+              <span flex></span>
+            </div>
+          </md-toolbar>
+          <md-content>
+            Hello!
+          </md-content>
+        </div>
+
+    </div> -->
+
+
+
 
 
     <div class="col-md-8 conversation">
@@ -60,7 +80,7 @@
                 </div>
             </div>
 
-            <!-- Quotation module -->
+            <!-- Quotation -->
 
             <div class="quotation" data-ng-repeat="inq in allInq|customFilter:chatID track by $index">
 
@@ -213,4 +233,9 @@
 
         </div>
     </div>
+</div>
+
+<div aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button type="button" class="mdl-snackbar__action"></button>
 </div>

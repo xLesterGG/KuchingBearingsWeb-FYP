@@ -1,4 +1,4 @@
-var app = angular.module("myApp",['ui.router']);
+var app = angular.module("myApp",['ui.router','ngMaterial']);
 document.addEventListener('DOMContentLoaded', function () {
     if (!Notification) {
         alert('Desktop notifications not available in your browser. Try Chrome.');
@@ -8,6 +8,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (Notification.permission !== "granted")
         Notification.requestPermission();
 });
+
+app.run(function ($rootScope,$timeout) {
+        $rootScope.$on('$viewContentLoaded', ()=> {
+          $timeout(() => {
+            componentHandler.upgradeAllRegistered();
+          })
+        })
+    }); // register mdl elemenets
 
 
 
@@ -167,9 +175,15 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
 
         $scope.currentInq = $scope.allInq[$scope.chatID];
 
-        for(var i=0;i<$scope.currentInq['bearings'].length;i++ ){
-            $scope.bearing1.push($scope.currentInq['bearings'][i].serialNo);
+
+        if($scope.currentInq!=undefined)
+        {
+            for(var i=0;i<$scope.currentInq['bearings'].length;i++ ){
+                $scope.bearing1.push($scope.currentInq['bearings'][i].serialNo);
+            }
         }
+
+
 
         // console.log($scope.bearing1);
     };
@@ -232,6 +246,18 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
         // $scope.getInq();
         // $scope.data.push()
         // console.log($scope.currentInq);
+
+        var notification = document.querySelector('.mdl-js-snackbar');
+            notification.MaterialSnackbar.showSnackbar(
+            {
+            message: 'Quotation sent!',
+            timeout: 5000,
+            actionHandler: function(event) {
+                notification.MaterialSnackbar.cleanup_();
+            },
+            actionText: 'Close',
+            }
+        );
 
         var toSend = {};
         toSend.dest = $scope.chatID;

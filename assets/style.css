@@ -37,14 +37,14 @@ input::-webkit-inner-spin-button {
   margin-left: auto;
   margin-right: auto;
   width:90%;
-  font-family:"Trebuchet MS", Helvetica, sans-serif;
+  font-family:"Roboto","Trebuchet MS", Helvetica, sans-serif;
 }
 
 #inqs{
     overflow: auto;
     float: left;
     /*height:600px;*/
-    height: 80vh;
+    height: 70vh;
     width: 100%;
     max-height: inherit;
     overflow-x: hidden;
@@ -477,13 +477,8 @@ input::-webkit-inner-spin-button {
 }
 
 body {
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: ,'Source Sans Pro', sans-serif;
 }
-
-
-
-
-
 
 
 
