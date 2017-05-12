@@ -232,6 +232,11 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
         // $scope.getInq();
         // $scope.data.push()
         // console.log($scope.currentInq);
+
+        var toSend = {};
+        toSend.dest = $scope.chatID;
+        toSend.mess = "I have sent you a Quotation";
+        socket.emit("sendMessage",toSend,$scope.currentInq.inquiryOwner);
     };
 
     $scope.addRow = ()=>{

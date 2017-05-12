@@ -304,19 +304,40 @@ socket.on("connection",(client)=>{
                         inquiryOwner:inqOwner
                     }
 
-                    var data = {
-                        inquiryPeoples: inq.inquiryPeoples,
-                        inquiryName:inq.inquiryName,
-                        inquiryID:inq.inquiryID,
-                        inquiryOwner: inq.inquiryOwner,
-                        lastMessage: msg,
-                        msgUnreadCountForMobile: unread,
-                        bearings : inq.bearings
+                    if(inq.quotations!=undefined)
+                    {
+                        var data = {
+                            inquiryPeoples: inq.inquiryPeoples,
+                            inquiryName:inq.inquiryName,
+                            inquiryID:inq.inquiryID,
+                            inquiryOwner: inq.inquiryOwner,
+                            lastMessage: msg,
+                            msgUnreadCountForMobile: unread,
+                            bearings : inq.bearings,
+                            quotations:inq.quotations
+                        }
+
+                        var update = {};
+                        update['/inquiries/'+ inq.inquiryID] = data;
+                        database.ref().update(update);
+                    }
+                    else{
+                        var data = {
+                            inquiryPeoples: inq.inquiryPeoples,
+                            inquiryName:inq.inquiryName,
+                            inquiryID:inq.inquiryID,
+                            inquiryOwner: inq.inquiryOwner,
+                            lastMessage: msg,
+                            msgUnreadCountForMobile: unread,
+                            bearings : inq.bearings
+                        }
+
+                        var update = {};
+                        update['/inquiries/'+ inq.inquiryID] = data;
+                        database.ref().update(update);
                     }
 
-                    var update = {};
-                    update['/inquiries/'+ inq.inquiryID] = data;
-                    database.ref().update(update);
+
                     // database.ref('/inquiries/'+ inq.inquiryID)
 
                     break;
@@ -336,14 +357,29 @@ socket.on("connection",(client)=>{
                 messageRead : true
             }
 
-            var data = {
-                inquiryPeoples: inq.inquiryPeoples,
-                inquiryName:inq.inquiryName,
-                inquiryID:inq.inquiryID,
-                inquiryOwner: inq.inquiryOwner,
-                lastMessage: msg,
-                bearings:inq.bearings
+            if(inq.quotations!=undefined){
+                var data = {
+                    inquiryPeoples: inq.inquiryPeoples,
+                    inquiryName:inq.inquiryName,
+                    inquiryID:inq.inquiryID,
+                    inquiryOwner: inq.inquiryOwner,
+                    lastMessage: msg,
+                    bearings:inq.bearings,
+                    quotations:inq.quotations
+                }
             }
+            else{
+                var data = {
+                    inquiryPeoples: inq.inquiryPeoples,
+                    inquiryName:inq.inquiryName,
+                    inquiryID:inq.inquiryID,
+                    inquiryOwner: inq.inquiryOwner,
+                    lastMessage: msg,
+                    bearings:inq.bearings
+                }
+            }
+
+
 
             var update = {};
             update['/inquiries/'+ inq.inquiryID] = data;
@@ -365,14 +401,29 @@ socket.on("connection",(client)=>{
                 messageRead : true
             }
 
-            var data = {
-                inquiryPeoples: inq.inquiryPeoples,
-                inquiryName:inq.inquiryName,
-                inquiryID:inq.inquiryID,
-                inquiryOwner: inq.inquiryOwner,
-                lastMessage: msg,
-                bearings:inq.bearings
+            if(inq.quotations!=undefined){
+                var data = {
+                    inquiryPeoples: inq.inquiryPeoples,
+                    inquiryName:inq.inquiryName,
+                    inquiryID:inq.inquiryID,
+                    inquiryOwner: inq.inquiryOwner,
+                    lastMessage: msg,
+                    bearings:inq.bearings,
+                    quotations:inq.quotations
+                }
             }
+            else{
+                var data = {
+                    inquiryPeoples: inq.inquiryPeoples,
+                    inquiryName:inq.inquiryName,
+                    inquiryID:inq.inquiryID,
+                    inquiryOwner: inq.inquiryOwner,
+                    lastMessage: msg,
+                    bearings:inq.bearings
+                }
+            }
+
+
 
             var update = {};
             update['/inquiries/'+ inq.inquiryID] = data;
