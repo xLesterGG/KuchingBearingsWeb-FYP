@@ -227,12 +227,12 @@ input::-webkit-inner-spin-button {
 
 #bearings{
     overflow-x: hidden;/*this 2*/
-    height: 22.5vh;
+    height: 35vh;
 }
 
 #quotes{
     overflow-x: hidden;/*this 2*/
-    height: 20vh;
+    height: 30vh;
 }
 
 

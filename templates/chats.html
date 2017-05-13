@@ -108,7 +108,7 @@
                 </div>
             </md-toolbar>
 
-            <div style="background-color:#F5F5F5" ng-show="currentInq.bearings.length >=2" id="bearings2">
+            <!-- <div style="background-color:#F5F5F5" ng-show="currentInq.bearings.length >=2" id="bearings2">
                 <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch data-ng-repeat="b in currentInq.bearings track by $index">
                     <md-card-title>
                         <md-card-title-text>
@@ -137,10 +137,10 @@
                       </p>
                     </md-card-content>
                 </md-card>
-            </div>
+            </div> -->
 
 
-            <div style="background-color:#F5F5F5" ng-show="currentInq.bearings.length ==1" id="bearings">
+            <div style="background-color:#F5F5F5" id="bearings">
                 <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch data-ng-repeat="b in currentInq.bearings track by $index">
                     <md-card-title>
                         <md-card-title-text>
