@@ -9,6 +9,14 @@ document.addEventListener('DOMContentLoaded', function () {
         Notification.requestPermission();
 });
 
+// app.config(function($mdThemingProvider,$mdIconProvider) {
+//   $mdThemingProvider.theme('default')
+//     .primaryPalette('indigo')
+//     .accentPalette('pink');
+//
+//
+// });
+
 app.run(function ($rootScope,$timeout) {
         $rootScope.$on('$viewContentLoaded', ()=> {
           $timeout(() => {
@@ -62,7 +70,60 @@ app.controller("loginCtrl",($scope,$state)=>{
 });
 
 
+app.controller("historyCtrl",($scope,inqService)=>{
 
+    $scope.orderByField = 'time';
+    $scope.reverseSort = false;
+
+    $scope.$watch(function() {
+        return inqService.getInq();
+    }, function() {
+        // Do something with newContacts.
+        $scope.getInq();
+    });
+
+    
+
+    $scope.openInq = (ID)=>{
+        window.open("http://localhost/#!/home/inbox/chat/"+ID);
+    }
+
+    $scope.getInq = ()=>{
+        $scope.allInq = inqService.getInq();
+
+        $scope.payments = [];
+
+        if(Object.keys($scope.allInq).length>0){
+            // console.log($scope.allInq['-Kjs3Aj_BfMqilAUcgpc'].inquiryID);
+
+            for(k in $scope.allInq){
+
+                if($scope.allInq[k].quotations != undefined){
+                    for(var i =0; i< $scope.allInq[k].quotations.length; i++){
+                        if($scope.allInq[k].quotations[i].payment!=undefined)
+                        {
+                            $scope.toAdd = $scope.allInq[k].quotations[i].payment;
+                            $scope.toAdd.time = $scope.allInq[k].quotations[i].payment.paymentDate;
+
+                            // console.log(new Date($scope.allInq[k].quotations[i].payment.paymentDate));
+                            $scope.toAdd.inquiryID = $scope.allInq[k].inquiryID;
+                            $scope.toAdd.inquiryName = $scope.allInq[k].inquiryName;
+                            $scope.toAdd.customer = $scope.allInq[k].inquiryOwner;
+                            $scope.toAdd.quote = $scope.allInq[k].quotations[i];
+                            $scope.toAdd.quoteNumber = i + 1;
+
+                            $scope.payments.push($scope.toAdd);
+                        }
+                    }
+                }
+
+            }
+
+            console.log($scope.payments);
+        }
+    };
+
+});
 
 app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqService)=>{
     socket.emit("getUser");
@@ -126,7 +187,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
                 });
 
                 notification.onclick = function () {
-                    window.open("http://localhost:3000/#!/inbox/chat/"+msg.inquiryID);
+                    window.open("http://localhost/#!/inbox/chat/"+msg.inquiryID);
                 };
 
             }

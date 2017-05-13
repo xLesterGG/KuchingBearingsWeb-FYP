@@ -1,12 +1,213 @@
-<div>
-  <div class="row">
+<div style="background-color:#f5f5f5; height:100vh">
+    <div class="container" data-ng-controller="historyCtrl" >
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Payments</h2>
 
-    <div class="col-md-3">
-      <h2> This is History Tab </h2>
-      <a data-ui-sref="history.content">Enable content</a>
+                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                    <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric" data-ng-click="orderByField='date'; reverseSort = !reverseSort">
+                                Payment Time
+
+                                <span ng-show="orderByField == 'date'">
+                                    <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up"></span>
+                                    <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down"></span>
+                                </span>
+
+                            </th>
+
+                            <th class="mdl-data-table__cell--non-numeric">
+                                Transaction ID
+                            </th>
+
+                            <th class="mdl-data-table__cell--non-numeric" data-ng-click="orderByField='customer'; reverseSort = !reverseSort">
+                                Customer
+                                <span ng-show="orderByField == 'customer'">
+                                    <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up"></span>
+                                    <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down"></span>
+                                </span>
+                            </th>
+
+                            <th class="mdl-data-table__cell--non-numeric" data-ng-click="orderByField='paymentState'; reverseSort = !reverseSort">
+                                Payment Status
+                                <span ng-show="orderByField == 'paymentState'">
+                                    <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up"></span>
+                                    <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down"></span>
+                                </span>
+                            </th>
+
+                            <th class="mdl-data-table__cell--non-numeric" data-ng-click="orderByField='inquiryName'; reverseSort = !reverseSort">
+                                <!-- Inquiry
+                                <span ng-show="orderByField == 'inquiryName'">
+                                    <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up"></span>
+                                    <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down"></span>
+                                </span> -->
+                            </th>
+
+                            <th class="mdl-data-table__cell--non-numeric">
+                                <!-- Quotation number -->
+                            </th>
+
+                            <th class="mdl-data-table__cell--non-numeric" data-ng-click="orderByField='amount'; reverseSort = !reverseSort">
+                                Amount
+                                <span ng-show="orderByField == 'amount'">
+                                    <span ng-show="!reverseSort" class="glyphicon glyphicon-chevron-up"></span>
+                                    <span ng-show="reverseSort" class="glyphicon glyphicon-chevron-down"></span>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr data-ng-repeat="p in payments|orderBy:orderByField:reverseSort">
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {{p.time| date: 'medium'}}
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {{p.paymentID}}
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                {{p.customer}}
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <span data-ng-if="p.paymentState == 'approved'">
+                                    <span class="text-success">{{p.paymentState}}</span>
+                                </span>
+
+
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <button data-ng-click="openInq(p.inquiryID)" class="mdl-button mdl-js-button mdl-button--primary">
+                                View {{p.inquiryName}}
+                                </button>
+                                <!-- <a data-ng-click="openInq(p.inquiryID)"></a> -->
+                            </td>
+
+                            <td class="mdl-data-table__cell--non-numeric">
+                                <button class="mdl-button mdl-js-button mdl-button--primary" data-toggle="modal" data-target="#myModal{{$index}}">
+                                View Quote #{{p.quoteNumber}}
+                                </button>
+
+
+                                <div id="myModal{{$index}}" class="modal fade" role="dialog">
+
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Quotation</h4>
+                                            </div>
+
+                                            <div class="modal-body" >
+                                                <!-- Selected -->
+                                                <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp " align="center">
+
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="mdl-data-table__cell--non-numeric">
+                                                                #
+                                                            </th>
+
+                                                            <th class="mdl-data-table__cell--non-numeric">
+                                                                Serial Number
+                                                            </th>
+
+                                                            <th>
+                                                                Quantity
+                                                            </th>
+
+                                                            <th>
+                                                                Price/ unit
+                                                            </th>
+
+                                                            <th>
+                                                                Total
+                                                            </th>
+
+                                                            <th>
+
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        <tr ng-repeat="s in p.quote.quoteBearings track by $index">
+                                                            <td class="mdl-data-table__cell--non-numeric">
+                                                                {{$index+1}}
+                                                            </td>
+
+                                                            <td class="mdl-data-table__cell--non-numeric">
+                                                                {{s.serialNo}}
+                                                            </td>
+
+                                                            <td>
+                                                                {{s.quantity}}
+                                                            </td>
+
+                                                            <td>
+                                                                {{s.pricePerUnit}}
+                                                            </td>
+
+                                                            <td>
+                                                                {{s.total | currency:"RM"}}
+                                                            </td>
+
+
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                Grand Total
+                                                            </td>
+
+                                                            <td>
+
+                                                            </td>
+                                                            <td>
+
+                                                            </td>
+
+                                                            <td>
+                                                                {{p.quote.gTotal|currency:"RM"}}
+                                                            </td>
+
+                                                        </tr>
+                                                    </tbody>
+
+
+
+
+                                                </table>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                {{p.amount| currency:'RM'}}
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+
+
+                </table>
+            </div>
+        </div>
     </div>
-
-    <div ui-view class="col-md-6"></div>
-
-  </div>
 </div>
