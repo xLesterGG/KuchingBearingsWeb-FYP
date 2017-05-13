@@ -58,6 +58,13 @@ app.use('/js',express.static(__dirname + '/node_modules/angular-material/'));
 app.use('/js',express.static(__dirname + '/node_modules/angular-animate/'));
 app.use('/js',express.static(__dirname + '/node_modules/angular-aria/'));
 
+
+app.use('/js',express.static(__dirname + '/node_modules/imageviewer/dist'));
+app.use('/css',express.static(__dirname + '/node_modules/imageviewer/dist'));
+
+
+
+
 // app.use('/js',express.static(__dirname+'/node_modules/firebase/'));
 
 

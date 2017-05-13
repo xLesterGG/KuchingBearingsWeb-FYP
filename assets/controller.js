@@ -9,13 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
         Notification.requestPermission();
 });
 
-// app.config(function($mdThemingProvider,$mdIconProvider) {
-//   $mdThemingProvider.theme('default')
-//     .primaryPalette('indigo')
-//     .accentPalette('pink');
-//
-//
-// });
+app.config(function($mdThemingProvider,$mdIconProvider) {
+  $mdThemingProvider.theme('default')
+    .primaryPalette('blue')
+    .accentPalette('pink');
+
+
+});
 
 app.run(function ($rootScope,$timeout) {
         $rootScope.$on('$viewContentLoaded', ()=> {
@@ -82,7 +82,7 @@ app.controller("historyCtrl",($scope,inqService)=>{
         $scope.getInq();
     });
 
-    
+
 
     $scope.openInq = (ID)=>{
         window.open("http://localhost/#!/home/inbox/chat/"+ID);
@@ -127,6 +127,10 @@ app.controller("historyCtrl",($scope,inqService)=>{
 
 app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqService)=>{
     socket.emit("getUser");
+
+    $scope.view = ()=>{
+        $('.image').viewer();
+    };
 
     socket.emit("retrieveInfo");
 

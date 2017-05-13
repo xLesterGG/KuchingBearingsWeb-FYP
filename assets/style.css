@@ -201,7 +201,7 @@ input::-webkit-inner-spin-button {
   height: 80vh;
   min-height: 80vh;
   /*max-height: 70vh;*/
-  width: 280px;
+  width: 100%;
   max-width: inherit;
 }
 .custInfos{
@@ -213,12 +213,30 @@ input::-webkit-inner-spin-button {
 }
 .inqInfos{
   overflow: auto;
-  overflow-x: hidden;
+  overflow-x: hidden;/*this 2*/
   height: 50vh;
   width: inherit;
   /*width: 280px;*/
   float: left;
 }
+
+#bearings2{
+    overflow-x: hidden;/*this 2*/
+    height: 45vh;
+}
+
+#bearings{
+    overflow-x: hidden;/*this 2*/
+    height: 22.5vh;
+}
+
+#quotes{
+    overflow-x: hidden;/*this 2*/
+    height: 20vh;
+}
+
+
+
 .inqInfo{
   border-bottom: 1px solid #e6e6e6;
 }
@@ -226,9 +244,9 @@ input::-webkit-inner-spin-button {
   float: left;
   width: 40px;
   height: 40px;
-  -moz-border-radius: 50%;
+  /*-moz-border-radius: 50%;
   -webkit-border-radius: 50%;
-  border-radius: 50%;
+  border-radius: 50%;*/
 }
 .quotation{
   float: left;
@@ -236,7 +254,7 @@ input::-webkit-inner-spin-button {
   padding-top: 5px;
   margin-top: 5px;
   padding-top: 5px;
-  height: 10vh;
+  height: 6vh;
 }
 
 ::-webkit-scrollbar {

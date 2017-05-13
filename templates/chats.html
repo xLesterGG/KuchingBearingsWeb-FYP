@@ -53,20 +53,45 @@
 
     <div class="col-md-4">
         <div class="info">
-            <div class="custInfos">
+
+            <!-- <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Customer Name</span>
+                        <span class="md-subhead">
+                        <p>
+                            email
+                        </p>
+                        </span>
+                    </md-card-title-text>
+
+                    <md-card-title-media>
+                        <div class="md-media-sm card-media"></div>
+                    </md-card-title-media>
+                </md-card-title>
+
+                <md-card-content>
+                  <p>
+                    Address
+                  </p>
+                </md-card-content>
+            </md-card>
+        </md-content> -->
+
+
+            <!-- <div class="custInfos">
                 <p style="font-size:20px; font-weight:600;">Customer Sdn Bhd</p>
                 <p> &#9743; 012-345 6789 / 082-123 456 <br>
                 &#9993; Customer@customer.com <br>
-                NO123 LOT321 LORONG YOUR HOUSE
+                NO123 LOT321 LORON
                 </p>
-            </div>
+            </div> -->
 
-            <h3 style="border-bottom: 1px solid #e6e6e6;"> Bearings </h3>
+            <!-- <h3 style="border-bottom: 1px solid #e6e6e6;"> </h3> -->
             <!-- ng-repeat inquiries -->
-            <div class="inqInfos" >
-
+            <!-- <div class="inqInfos" >
                 <div class="inqInfo" data-ng-repeat="b in currentInq.bearings track by $index">
-                    <img src="https://pbs.twimg.com/profile_images/378800000790881573/b88c26b17a46d0b1ada90dec7af86963_normal.jpeg" alt="bearing picture"/>
+                    <img class="image" data-ng-click="view()" src="{{b.imageUrl}}" alt="bearing picture"/>
                     <p><br><strong>Serial number : {{b.serialNo}}</strong> <br>
                     Height : {{b.height}} mm <br>
                     Diameter (I) : {{b.diameterI}} mm <br>
@@ -74,13 +99,84 @@
                     Extra comments : {{b.extraComment}}
                     </p>
                 </div>
+            </div> -->
+            <md-toolbar md-scroll-shrink="">
+                <div class="md-toolbar-tools">
+                    <h3>
+                        <span>Bearings Requested</span>
+                    </h3>
+                </div>
+            </md-toolbar>
+
+            <div style="background-color:#F5F5F5" ng-show="currentInq.bearings.length >=2" id="bearings2">
+                <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch data-ng-repeat="b in currentInq.bearings track by $index">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline" ng-show="b.serialNo!=''">Serial: {{b.serialNo}}</span>
+
+                            <span class="md-headline" ng-show="b.serialNo==''">Serial: Not provided</span>
+                            <span class="md-subhead">
+                                <p>
+                                    Height : {{b.height}} mm <br>
+                                    Diameter (I) : {{b.diameterI}} mm <br>
+                                    Diameter (O) : {{b.diameterO}} mm <br>
+                                </p>
+                            </span>
+                        </md-card-title-text>
+
+                        <md-card-title-media>
+                            <div class="md-media-sm card-media">
+                                <img class="image" ng-click="view()" ng-src="{{b.imageUrl}}" />
+                            </div>
+                        </md-card-title-media>
+                    </md-card-title>
+
+                    <md-card-content>
+                      <p>
+                        Extra comments: {{b.extraComment}}
+                      </p>
+                    </md-card-content>
+                </md-card>
             </div>
+
+
+            <div style="background-color:#F5F5F5" ng-show="currentInq.bearings.length ==1" id="bearings">
+                <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch data-ng-repeat="b in currentInq.bearings track by $index">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline" ng-show="b.serialNo!=''">Serial: {{b.serialNo}}</span>
+
+                            <span class="md-headline" ng-show="b.serialNo==''">Serial: Not provided</span>
+                            <span class="md-subhead">
+                                <p>
+                                    Height : {{b.height}} mm <br>
+                                    Diameter (I) : {{b.diameterI}} mm <br>
+                                    Diameter (O) : {{b.diameterO}} mm <br>
+                                </p>
+                            </span>
+                        </md-card-title-text>
+
+                        <md-card-title-media>
+                            <div class="md-media-sm card-media">
+                                <img class="image" ng-click="view()" ng-src="{{b.imageUrl}}" />
+                            </div>
+                        </md-card-title-media>
+                    </md-card-title>
+
+                    <md-card-content>
+                      <p>
+                        Extra comments: {{b.extraComment}}
+                      </p>
+                    </md-card-content>
+                </md-card>
+            </div>
+
 
             <!-- Quotation -->
 
             <div class="quotation" data-ng-repeat="inq in allInq|customFilter:chatID track by $index">
 
-                <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal{{$index}}" > Send Quotation </button>
+                <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#myModal{{$index}}" > Send Quotation </button>
 
                 <div id="myModal{{$index}}" class="modal fade" role="dialog">
 
@@ -215,17 +311,144 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <md-toolbar md-scroll-shrink="">
+                <div class="md-toolbar-tools">
+                    <h3>
+                        <span>Quotations Sent</span>
+                    </h3>
+                </div>
+            </md-toolbar>
+
+            <!-- <ul>
+                <li ng-repeat="q in currentInq.quotations track by $index" data-toggle="modal" data-target="#mModal{{$index}}">
+                    aaa
+                </li>
+            </ul> -->
+            <div id="quotes">
+                <div style="background-color:#F5F5F5"ng-repeat="q in currentInq.quotations track by $index">
+                    <md-list flex>
+                        <md-list-item class="md-3-line"  ng-click="''" data-toggle="modal" data-target="#mModal{{$index}}">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJO9WNiqBnKiS88FiXyDsR8-uqLjZKGsjo_mg3ytMA6_oBapRE1g" class="md-avatar glyphicon" alt="quote logo"/>
+
+                            <div class="md-list-item-text" layout="column">
+                                <h3>Quotation #{{$index+1}}</h3>
+                                <h4>Grand total: {{ q.gTotal|currency:'RM' }}</h4>
+                                <p>Number of bearings: {{q.quoteBearings.length}}</p>
+                            </div>
+
+                        </md-list-item>
+
+
+                    </md-list>
+
+                    <div id="mModal{{$index}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Quotation</h4>
+                                </div>
+
+                                <div class="modal-body" >
+                                    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp " align="center">
+
+                                        <thead>
+                                            <tr>
+                                                <th class="mdl-data-table__cell--non-numeric">
+                                                    #
+                                                </th>
+
+                                                <th class="mdl-data-table__cell--non-numeric">
+                                                    Serial Number
+                                                </th>
+
+                                                <th>
+                                                    Quantity
+                                                </th>
+
+                                                <th>
+                                                    Price/ unit
+                                                </th>
+
+                                                <th>
+                                                    Total
+                                                </th>
+
+                                                <th>
+
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr ng-repeat="s in q.quoteBearings track by $index">
+                                                <td class="mdl-data-table__cell--non-numeric">
+                                                    {{$index+1}}
+                                                </td>
+
+                                                <td class="mdl-data-table__cell--non-numeric">
+                                                    {{s.serialNo}}
+                                                </td>
+
+                                                <td>
+                                                    {{s.quantity}}
+                                                </td>
+
+                                                <td>
+                                                    {{s.pricePerUnit}}
+                                                </td>
+
+                                                <td>
+                                                    {{s.total | currency:"RM"}}
+                                                </td>
+
+
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="2">
+                                                    Grand Total
+                                                </td>
+
+                                                <td>
+
+                                                </td>
+                                                <td>
+
+                                                </td>
+
+                                                <td>
+                                                    {{q.gTotal|currency:"RM"}}
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+
+
+
+
+                                    </table>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+
+                        </div>
 
                     </div>
-
                 </div>
-
-
-
-                <ul>
-                    <li> Quotation 1 </li>
-                </ul>
             </div>
+
+
+
 
         </div>
     </div>
