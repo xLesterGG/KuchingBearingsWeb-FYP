@@ -3,20 +3,6 @@
 <div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter(); autojoinRoom();getInq();" >
     <!-- {{chatID}} -->
 
-    <!-- <div class="row">
-        <div class="col-md-8">
-            <md-toolbar>
-            <div class="md-toolbar-tools">
-              <span>My App's Title</span>
-              <span flex></span>
-            </div>
-          </md-toolbar>
-          <md-content>
-            Hello!
-          </md-content>
-        </div>
-
-    </div> -->
 
     <div class="col-md-8 conversation">
         <div id="convo" data-ng-model="convo">
@@ -141,7 +127,7 @@
 
 
             <div style="background-color:#F5F5F5" id="bearings">
-                <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch data-ng-repeat="b in currentInq.bearings track by $index">
+                <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch data-ng-repeat="b in currentInq1.bearings track by $index">
                     <md-card-title>
                         <md-card-title-text>
                             <span class="md-headline" ng-show="b.serialNo!=''">Serial: {{b.serialNo}}</span>
@@ -158,7 +144,7 @@
 
                         <md-card-title-media>
                             <div class="md-media-sm card-media">
-                                <img class="image" ng-click="view()" ng-src="{{b.imageUrl}}" />
+                                <img class="image" ng-click="view()" ng-src="{{b.imageUrl}}" alt="bearing picture"/>
                             </div>
                         </md-card-title-media>
                     </md-card-title>
@@ -330,7 +316,7 @@
                 </li>
             </ul> -->
             <div id="quotes">
-                <div style="background-color:#F5F5F5"ng-repeat="q in currentInq.quotations track by $index">
+                <div style="background-color:#F5F5F5" ng-repeat="q in currentInq1.quotations track by $index">
                     <md-list flex>
                         <md-list-item class="md-3-line"  ng-click="''" data-toggle="modal" data-target="#mModal{{$index}}">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJO9WNiqBnKiS88FiXyDsR8-uqLjZKGsjo_mg3ytMA6_oBapRE1g" class="md-avatar glyphicon" alt="quote logo"/>

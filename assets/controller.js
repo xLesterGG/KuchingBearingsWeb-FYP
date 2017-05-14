@@ -234,12 +234,14 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
     $scope.currentInq = {};
     $scope.bearing1= [];
     $scope.allInq = {};
+    $scope.currentInq1 = {};
 
     $scope.getInq = ()=>{
         $scope.allInq = inqService.getInq();
 
         $scope.currentInq = $scope.allInq[$scope.chatID];
 
+        $scope.currentInq1 = angular.copy($scope.currentInq);
 
         if($scope.currentInq!=undefined)
         {
@@ -279,7 +281,6 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
     };
 
     $scope.sendQuote = ()=>{
-        // socket.emit("sendQuote",$scope.currentInq,$scope.currentInqOri);
         $scope.data = [];
         // console.log($scope.ppu);
 
@@ -303,14 +304,10 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
         $scope.tosend.quoteBearings = $scope.data;
         $scope.tosend.gTotal = $scope.gTotal;
 
-        // console.log($scope.tosend);
-        // console.log($scope.currentInq);
+
         console.log($scope.currentInq);
         socket.emit("sendQuote",$scope.tosend,$scope.currentInq);
 
-        // $scope.getInq();
-        // $scope.data.push()
-        // console.log($scope.currentInq);
 
         var notification = document.querySelector('.mdl-js-snackbar');
             notification.MaterialSnackbar.showSnackbar(
@@ -332,6 +329,8 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
 
     $scope.addRow = ()=>{
         $scope.currentInq.bearings.push({});
+
+        console.log($scope.currentInq1);
         $scope.bearing1.push('');
     };
 
@@ -343,9 +342,9 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
             $scope.quantity.splice(index,1);
             // $scope.total.splice(index,1);
 
-            $scope.bearing1.splice(index,1);
+            $scope.bearing.splice(index,1);
 
-            console.log($scope.total);
+            // console.log($scope.total);
             $scope.getTotal();
         }
     };
@@ -366,7 +365,6 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
             toSend.dest = $scope.chatID;
             toSend.mess = $scope.inputMessage;
             socket.emit("sendMessage",toSend,$scope.currentInq.inquiryOwner);
-            // console.log($scope.currentInq.inquiryOwner)
             $scope.inputMessage = '';
         }
     };
