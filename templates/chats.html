@@ -1,11 +1,41 @@
-
-
 <div data-ng-controller="chatBoxCtrl" data-ng-init="updateFilter(); autojoinRoom();getInq();" >
-    <!-- {{chatID}} -->
-
 
     <div class="col-md-8 conversation">
+
+        <div style="background-color:#F5F5F5">
+            <md-toolbar md-scroll-shrink="">
+                <div class="md-toolbar-tools">
+                    <h3>
+                        <span>Inquiry title:</span>
+                    </h3>
+                </div>
+            </md-toolbar>
+
+            <md-card  md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Customer Name</span>
+
+                        <span class="md-subhead">
+                            <p>
+                                Email <br>
+                                Address etc .. <br>
+                                See Customer History
+                            </p>
+                        </span>
+                    </md-card-title-text>
+
+                    <md-card-title-media>
+                        <div class="md-media-sm card-media">
+                            <img class="image" ng-click="view()" ng-src="http://img.clipartall.com/user-image-user-clipart-276_298.png" alt="bearing picture"/>
+                        </div>
+                    </md-card-title-media>
+                </md-card-title>
+            </md-card>
+        </div>
+
         <div id="convo" data-ng-model="convo">
+
             <div data-ng-repeat="msg in messages |filter: filterR track by $index">
 
                 <div ng-show="msg.messageUser!='admin'">
@@ -47,7 +77,7 @@
     </div>
 
     <div class="col-md-4">
-        <div class="info">
+        <div class="info" >
             <!-- <div class="custInfos">
                 <p style="font-size:20px; font-weight:600;">Customer Sdn Bhd</p>
                 <p> &#9743; 012-345 6789 / 082-123 456 <br>
@@ -214,7 +244,7 @@
                                     </div>
 
                                 </div>
-                                
+
                             </div>
 
                             <div class="modal-footer">
