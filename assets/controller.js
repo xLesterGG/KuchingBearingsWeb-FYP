@@ -191,7 +191,8 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
                 });
 
                 notification.onclick = function () {
-                    window.open("http://localhost/#!/inbox/chat/"+msg.inquiryID);
+                    window.open("http://localhost/#!/home/inbox/chat/"+msg.inquiryID.trim());
+                    window.open("http://localhost/#!/home/inbox/chat/"+ID);
                 };
 
             }
@@ -221,6 +222,8 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
     $scope.chatID = $stateParams.id; //get chat id
     $scope.messages = messageService.getMessage(); //get messages
 
+    $scope.all = {};
+
     // $scope.allInq = inqService.getInq();
 
     $scope.$watch(function() {
@@ -234,14 +237,47 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
     $scope.currentInq = {};
     $scope.bearing1= [];
     $scope.allInq = {};
-    $scope.currentInq1 = {};
+    // $scope.currentInq1 = {};
+
+
+    $scope.addRow = ()=>{
+        $scope.currentInq.bearings.push({});
+
+        console.log($scope.currentInq);
+        console.log($scope.currentInq1);
+        $scope.bearing1.push('');
+    };
+
+    $scope.removeRow= (index)=>{
+        if(index>-1)
+        {
+            $scope.currentInq.bearings.splice(index,1);
+            $scope.ppu.splice(index,1);
+            $scope.quantity.splice(index,1);
+            // $scope.total.splice(index,1);
+
+            $scope.bearing.splice(index,1);
+
+            // console.log($scope.total);
+            $scope.getTotal();
+        }
+    };
 
     $scope.getInq = ()=>{
         $scope.allInq = inqService.getInq();
 
-        $scope.currentInq = $scope.allInq[$scope.chatID];
+        $scope.currentInq = angular.copy($scope.allInq[$scope.chatID]);
 
-        $scope.currentInq1 = angular.copy($scope.currentInq);
+        console.log($scope.currentInq);
+
+        // console.log(Object.keys($scope.currentInq1).length);
+        // console.log($scope.currentInq1);
+        if($scope.currentInq1 == undefined)
+        {
+            $scope.currentInq1 = angular.copy($scope.currentInq);
+        }
+
+
 
         if($scope.currentInq!=undefined)
         {
@@ -327,27 +363,7 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
         socket.emit("sendMessage",toSend,$scope.currentInq.inquiryOwner);
     };
 
-    $scope.addRow = ()=>{
-        $scope.currentInq.bearings.push({});
 
-        console.log($scope.currentInq1);
-        $scope.bearing1.push('');
-    };
-
-    $scope.removeRow= (index)=>{
-        if(index>-1)
-        {
-            $scope.currentInq.bearings.splice(index,1);
-            $scope.ppu.splice(index,1);
-            $scope.quantity.splice(index,1);
-            // $scope.total.splice(index,1);
-
-            $scope.bearing.splice(index,1);
-
-            // console.log($scope.total);
-            $scope.getTotal();
-        }
-    };
 
 
     $scope.updateFilter = ()=>{

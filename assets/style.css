@@ -269,6 +269,7 @@ input::-webkit-inner-spin-button {
 
 #sMsg .write {
     /*position: absolute;*/
+    z-index: -1;
     float: left;
     border: 1px solid #e6e6e6;
     background-color: #eceff1;

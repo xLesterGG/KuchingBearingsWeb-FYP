@@ -25,6 +25,15 @@
         <div id="sMsg">
             <form ng-submit="sendMessage2()">
 
+                <!-- <div class="row">
+                    <div class="col-md-12" style="background-color:#F5F5F5">
+                        <md-input-container class="md-block" flex-gt-sm>
+                              <label>Your message</label>
+                              <input ng-model="user.firstName">
+                            </md-input-container>
+                    </div>
+                </div> -->
+
                 <div class="write">
                     <a href="javascript:;" class="write-link attach"></a>
                     <input data-ng-click="updateRead()" type="text" data-ng-model="inputMessage"/>
@@ -39,32 +48,6 @@
 
     <div class="col-md-4">
         <div class="info">
-
-            <!-- <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
-                <md-card-title>
-                    <md-card-title-text>
-                        <span class="md-headline">Customer Name</span>
-                        <span class="md-subhead">
-                        <p>
-                            email
-                        </p>
-                        </span>
-                    </md-card-title-text>
-
-                    <md-card-title-media>
-                        <div class="md-media-sm card-media"></div>
-                    </md-card-title-media>
-                </md-card-title>
-
-                <md-card-content>
-                  <p>
-                    Address
-                  </p>
-                </md-card-content>
-            </md-card>
-        </md-content> -->
-
-
             <!-- <div class="custInfos">
                 <p style="font-size:20px; font-weight:600;">Customer Sdn Bhd</p>
                 <p> &#9743; 012-345 6789 / 082-123 456 <br>
@@ -73,19 +56,7 @@
                 </p>
             </div> -->
 
-            <!-- <h3 style="border-bottom: 1px solid #e6e6e6;"> </h3> -->
-            <!-- ng-repeat inquiries -->
-            <!-- <div class="inqInfos" >
-                <div class="inqInfo" data-ng-repeat="b in currentInq.bearings track by $index">
-                    <img class="image" data-ng-click="view()" src="{{b.imageUrl}}" alt="bearing picture"/>
-                    <p><br><strong>Serial number : {{b.serialNo}}</strong> <br>
-                    Height : {{b.height}} mm <br>
-                    Diameter (I) : {{b.diameterI}} mm <br>
-                    Diameter (O) : {{b.diameterO}} mm <br>
-                    Extra comments : {{b.extraComment}}
-                    </p>
-                </div>
-            </div> -->
+
             <md-toolbar md-scroll-shrink="">
                 <div class="md-toolbar-tools">
                     <h3>
@@ -93,37 +64,6 @@
                     </h3>
                 </div>
             </md-toolbar>
-
-            <!-- <div style="background-color:#F5F5F5" ng-show="currentInq.bearings.length >=2" id="bearings2">
-                <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch data-ng-repeat="b in currentInq.bearings track by $index">
-                    <md-card-title>
-                        <md-card-title-text>
-                            <span class="md-headline" ng-show="b.serialNo!=''">Serial: {{b.serialNo}}</span>
-
-                            <span class="md-headline" ng-show="b.serialNo==''">Serial: Not provided</span>
-                            <span class="md-subhead">
-                                <p>
-                                    Height : {{b.height}} mm <br>
-                                    Diameter (I) : {{b.diameterI}} mm <br>
-                                    Diameter (O) : {{b.diameterO}} mm <br>
-                                </p>
-                            </span>
-                        </md-card-title-text>
-
-                        <md-card-title-media>
-                            <div class="md-media-sm card-media">
-                                <img class="image" ng-click="view()" ng-src="{{b.imageUrl}}" />
-                            </div>
-                        </md-card-title-media>
-                    </md-card-title>
-
-                    <md-card-content>
-                      <p>
-                        Extra comments: {{b.extraComment}}
-                      </p>
-                    </md-card-content>
-                </md-card>
-            </div> -->
 
 
             <div style="background-color:#F5F5F5" id="bearings">
@@ -138,6 +78,7 @@
                                     Height : {{b.height}} mm <br>
                                     Diameter (I) : {{b.diameterI}} mm <br>
                                     Diameter (O) : {{b.diameterO}} mm <br>
+                                    # {{$index+1}}<br>
                                 </p>
                             </span>
                         </md-card-title-text>
@@ -174,14 +115,7 @@
                             </div>
 
                             <div class="modal-body" >
-                                <!-- <ul style="list-style:none"
-                                    <li data-ng-repeat="x in inq.bearings track by $index">
-                                        <input type="checkbox" data-ng-model="bearing" ng-change="updateSelected('{{x.serialNo}}')"> {{x.serialNo}}
 
-                                    </li>
-                                </ul> -->
-
-                                <!-- Selected -->
                                 <table class="table" align="center">
                                     <tr>
                                         <th>
@@ -209,7 +143,7 @@
                                         </th>
                                     </tr>
 
-                                    <tr ng-repeat="s in inq.bearings track by $index">
+                                    <tr ng-repeat="s in currentInq.bearings track by $index">
                                         <td>
                                             {{$index+1}}
                                         </td>
@@ -316,7 +250,7 @@
                 </li>
             </ul> -->
             <div id="quotes">
-                <div style="background-color:#F5F5F5" ng-repeat="q in currentInq1.quotations track by $index">
+                <div style="background-color:#F5F5F5" ng-repeat="q in currentInq.quotations track by $index">
                     <md-list flex>
                         <md-list-item class="md-3-line"  ng-click="''" data-toggle="modal" data-target="#mModal{{$index}}">
                             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJO9WNiqBnKiS88FiXyDsR8-uqLjZKGsjo_mg3ytMA6_oBapRE1g" class="md-avatar glyphicon" alt="quote logo"/>
