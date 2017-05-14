@@ -1,78 +1,45 @@
-<!-- <!DOCTYPE html>
-<html lang="en" data-ng-app="myApp">
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
-        <script src="/socket.io/socket.io.js"></script>
-    </head>
-
-    <body> -->
-
-        <div data-ng-controller="loginCtrl" class="container">
-             <!-- <input type="text" data-ng-model="email"/>
-            <input type="password" data-ng-model="pass"/>
-
-            <button type="button" data-ng-click="register(email,pass)">ASDADASD</button> -->
+<div data-ng-controller="loginCtrl" class="container">
 
 
-            <!-- <input type="text" data-ng-model="aemail" />
-            <input type="password" data-ng-model="apass" />
-            <button type="button" data-ng-click="login(aemail,apass)">ASDADASD</button> -->
+    <div class="card card-container" >
+        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
+        <p id="profile-name" class="profile-name-card"></p>
 
-            <div class="card card-container" >
-                <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
-                <p id="profile-name" class="profile-name-card"></p>
-
-                <div data-ng-show="showlogin">
-                    <form class="form-signin" data-ng-submit="login(email,pass)">
-                        <span id="reauth-email" class="reauth-email"></span>
-                        <input type="email" id="inputEmail" data-ng-model="email" class="form-control" placeholder="Email address" required autofocus>
-                        <input type="password" id="inputPassword" data-ng-model="pass" class="form-control" placeholder="Password" required>
-                        <div id="remember" class="checkbox">
-                            <label>
-                                <input type="checkbox" value="remember-me"> Remember me
-                            </label>
-                        </div>
-                        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-                        <!-- <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" data-ng-click="login(email,pass)">Sign in</button> -->
-
-                    </form>
-                    <a data-ng-click="showlogin = false" class="forgot-password">
-                        Forgot the password?
-                    </a>
+        <div data-ng-show="showlogin">
+            <form class="form-signin" data-ng-submit="login(email,pass)">
+                <span id="reauth-email" class="reauth-email"></span>
+                <input type="email" id="inputEmail" data-ng-model="email" class="form-control" placeholder="Email address" required autofocus>
+                <input type="password" id="inputPassword" data-ng-model="pass" class="form-control" placeholder="Password" required>
+                <div id="remember" class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
                 </div>
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+                <!-- <button class="btn btn-lg btn-primary btn-block btn-signin" type="button" data-ng-click="login(email,pass)">Sign in</button> -->
 
-                <div data-ng-show="!showlogin">
-                    <p>
-                        Please enter your email address to reset your password.
-                    </p>
-
-                    <form data-ng-submit="resetPassword(email)">
-                        <input type="email" data-ng-model="email" class="form-control" placeholder="Email address" required autofocus>
-                        <br />
-
-                        <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Reset password</button>
-                    </form>
-                    <br />
-                    <a data-ng-click="showlogin = true" class="forgot-password">
-                        Already have an account? Login
-                    </a>
-
-                </div>
-
-
-            </div>
-
-
+            </form>
+            <a data-ng-click="showlogin = false" class="forgot-password">
+                Forgot the password?
+            </a>
         </div>
 
+        <div data-ng-show="!showlogin">
+            <p>
+                Please enter your email address to reset your password.
+            </p>
 
-        <!-- <script src="/js/jquery.js"></script>
-        <script src="/js/bootstrap.js"></script>
-        <script src="/js/angular.js"></script>
-        <script src="/js/angular-ui-router.js"></script>
-        <script src="/js/controller.js"></script>
-        <script src="/js/firebase.js"></script> -->
+            <form data-ng-submit="resetPassword(email)">
+                <input type="email" data-ng-model="email" class="form-control" placeholder="Email address" required autofocus>
+                <br />
 
-    <!-- </body>
-</html> -->
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Reset password</button>
+            </form>
+            <br />
+            <a data-ng-click="showlogin = true" class="forgot-password">
+                Already have an account? Login
+            </a>
+
+        </div>
+    </div>
+</div>

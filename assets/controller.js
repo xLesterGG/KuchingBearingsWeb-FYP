@@ -30,7 +30,6 @@ app.run(function ($rootScope,$timeout) {
 var socket= io.connect("http://localhost:80");
 
 app.controller("loginCtrl",($scope,$state)=>{
-    // $state.go('home');
 
     $scope.showlogin = true;
 
@@ -60,7 +59,7 @@ app.controller("loginCtrl",($scope,$state)=>{
     });
 
     socket.on("redirectToInbox",(user)=>{
-        $state.go('home');
+        $state.go('home.inbox');
     });
 
     socket.on("redirectToLogin",(user)=>{
@@ -78,7 +77,6 @@ app.controller("historyCtrl",($scope,inqService)=>{
     $scope.$watch(function() {
         return inqService.getInq();
     }, function() {
-        // Do something with newContacts.
         $scope.getInq();
     });
 
@@ -134,15 +132,11 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
 
     socket.emit("retrieveInfo");
 
-    // $state.go('inbox');
-    // socket.on("redirectToLogin1",()=>{
-    //     // console.log(user);
-    //     // console.log('1');
-    //
-    //
-    //     // $state.go('login');
-    //     // window.location = "http://localhost:3000/#!/";
-    // });
+    socket.on("redirectToLogin1",()=>{
+
+        // $state.go('login');
+        // window.location = "http://localhost/#!/home/inbox";
+    });
 
     $scope.logout = ()=>{
         socket.emit("logoutUser");
@@ -268,10 +262,6 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
 
         $scope.currentInq = angular.copy($scope.allInq[$scope.chatID]);
 
-        console.log($scope.currentInq);
-
-        // console.log(Object.keys($scope.currentInq1).length);
-        // console.log($scope.currentInq1);
         if($scope.currentInq1 == undefined)
         {
             $scope.currentInq1 = angular.copy($scope.currentInq);
@@ -428,10 +418,11 @@ app.filter('orderObjectBy', function() {
 
 app.config(function($stateProvider,$urlRouterProvider) {
 //  $urlRouterProvider.otherwise('/home');
-$urlRouterProvider.otherwise("home");
+$urlRouterProvider.otherwise('home/inbox');
   $stateProvider
     .state('home',{
         url:"/home",
+        abstract: true,
         templateUrl: "templates/home.html"
     })
     .state('home.admin',{
@@ -453,17 +444,10 @@ $urlRouterProvider.otherwise("home");
       url: '/history',
       templateUrl: "templates/history.html"
     })
-    //
-    // .state('history.content',{
-    //   url: '/history/content',
-    //   templateUrl: "templates/historyContent.html"
-    // })
-    //
     .state('home.inbox',{
       url: '/inbox',
       templateUrl: "templates/inbox.html"
     })
-
     .state('home.inbox.chat',{
       url: '/chat/:id',
       templateUrl: "templates/chats.html"
