@@ -5,24 +5,6 @@ var server = require('http').createServer(app);
 var io = require('socket.io');
 var uuid = require('node-uuid');
 
-
-// var config = {
-//     apiKey: "AIzaSyDmqaNP6Txo6uYapMozqvNwa5BuQtfY_4Y",
-//     authDomain: "testing-97f82.firebaseapp.com",
-//     databaseURL: "https://testing-97f82.firebaseio.com",
-//     storageBucket: "testing-97f82.appspot.com",
-//     messagingSenderId: "772760457598"
-// };
-
-// var config = {
-//     apiKey: "AIzaSyBgaYoTGGIx-XX84lp8zrvgOI1_SFm6iaM",
-//     authDomain: "kuching-bearings.firebaseapp.com",
-//     databaseURL: "https://kuching-bearings.firebaseio.com",
-//     projectId: "kuching-bearings",
-//     storageBucket: "kuching-bearings.appspot.com",
-//     messagingSenderId: "630426422934"
-//   };
-
 var config = {
     apiKey: "AIzaSyAs4US9O4tjsC_DZdcgmbPT3D0Xd179od4",
     authDomain: "kuchingbearings.firebaseapp.com",
@@ -95,6 +77,7 @@ var socket = io.listen(server);
 var people = {};
 var inquiries = {};
 var conversations = {};
+var users = {};
 
 var firebase = require('firebase');
 firebase.initializeApp(config);
@@ -107,6 +90,7 @@ var isReady = false;
 var a = database.ref('/inquiries'); // get changes to rooms
 var b = database.ref('/conversations');
 var c = database.ref('/conversations/'); // to receive incoming messages and update view
+var d = database.ref('/users');
 
 
 socket.on("connection",(client)=>{
@@ -121,6 +105,16 @@ socket.on("connection",(client)=>{
 
     client.on("retrieveInfo",()=>{
         console.log('retrieving');
+
+        d.on('value',(res)=>{
+            for(var x in res.val()){
+                 users[x] = res.val()[x];
+            }
+
+            socket.sockets.emit("updateUserList",users);
+
+            // console.log(users);
+        });
 
         a.on('value',function(res){
             // console.log('loaded / new inquiry');
@@ -168,8 +162,8 @@ socket.on("connection",(client)=>{
                         conversations[res.key][k] = res.val()[k];
                         var temp = conversations[res.key][k];
                         temp.inquiryID = res.key;
-                        console.log('temp is');
-                        console.log(temp);
+                        // console.log('temp is');
+                        // console.log(temp);
                         // console.log('key is ' + key);
                         client.emit("recieveMessage",temp)
                         // socket.sockets.emit("recieveMessage",temp);
@@ -242,7 +236,8 @@ socket.on("connection",(client)=>{
                             inquiryID:inq.inquiryID,
                             inquiryOwner: inq.inquiryOwner,
                             lastMessage: msg,
-                            bearings: inq.bearings
+                            bearings: inq.bearings,
+                            inquiryTime: inq.inquiryTime
                         }
 
                         var update = {};
@@ -255,7 +250,8 @@ socket.on("connection",(client)=>{
                             inquiryName:inq.inquiryName,
                             inquiryID:inq.inquiryID,
                             inquiryOwner: inq.inquiryOwner,
-                            bearings: inq.bearings
+                            bearings: inq.bearings,
+                            inquiryTime: inq.inquiryTime
                         }
 
                         var update = {};
@@ -278,7 +274,6 @@ socket.on("connection",(client)=>{
 
         if(inq== null){
             // do something
-            console.log('null');
         }else{
             var found = false;
             for(i=0;i<inq.inquiryPeoples.length;i++){
@@ -287,8 +282,7 @@ socket.on("connection",(client)=>{
                     var msg = {};
                     msg.msg = message.mess;
                     msg.sender = 'admin';
-                    // console.log(inq.inquiryID);
-                    // console.log('not null');
+
                     var unread = 0;
 
                     if(inq.msgUnreadCountForMobile == undefined){
@@ -300,15 +294,31 @@ socket.on("connection",(client)=>{
 
                     var uid = uuid.v4();
 
-
-                    database.ref('/conversations/'+inq.inquiryID).push({
+/**************************************************************************************/
+                    var a = database.ref('/conversations/'+inq.inquiryID).push({
                         messageText: msg.msg,
                         messageTime : parseInt(new Date().getTime()),
                         messageUser : msg.sender,
                         messageRead: false,
                         messageID:uid,
-                        inquiryOwner:inqOwner
+                        inquiryOwner:inqOwner,
+                        inquiryTime: inq.inquiryTime
                     });
+
+                    // console.log(a.key);
+
+                    database.ref('/adconversations/'+inqOwner+'/'+inq.inquiryID+'/'+a.key).set({
+                        messageText: msg.msg,
+                        messageTime : parseInt(new Date().getTime()),
+                        messageUser : msg.sender,
+                        messageRead: false,
+                        messageID:uid,
+                        inquiryOwner:inqOwner,
+                        inquiryTime: inq.inquiryTime
+                    });
+
+/**************************************************************************************/
+
 
                     var msg = {
                         messageText: msg.msg,
@@ -329,12 +339,24 @@ socket.on("connection",(client)=>{
                             lastMessage: msg,
                             msgUnreadCountForMobile: unread,
                             bearings : inq.bearings,
-                            quotations:inq.quotations
+                            quotations:inq.quotations,
+                            inquiryTime: inq.inquiryTime
                         }
 
                         var update = {};
+                        var update1 = {};
+
+/**************************************************************************************/
+
                         update['/inquiries/'+ inq.inquiryID] = data;
                         database.ref().update(update);
+
+                        update1['/adinquiries/'+ inqOwner+'/'+ inq.inquiryID] =data;
+                        database.ref().update(update1);
+
+
+/**************************************************************************************/
+
                     }
                     else{
                         var data = {
@@ -344,12 +366,21 @@ socket.on("connection",(client)=>{
                             inquiryOwner: inq.inquiryOwner,
                             lastMessage: msg,
                             msgUnreadCountForMobile: unread,
-                            bearings : inq.bearings
+                            bearings : inq.bearings,
+                            inquiryTime: inq.inquiryTime
                         }
 
                         var update = {};
+                        var update1 = {};
+/**************************************************************************************/
+
                         update['/inquiries/'+ inq.inquiryID] = data;
                         database.ref().update(update);
+
+                        update1['/adinquiries/'+ inqOwner+'/'+ inq.inquiryID] =data;
+                        database.ref().update(update1);
+/**************************************************************************************/
+
                     }
 
 
@@ -380,7 +411,8 @@ socket.on("connection",(client)=>{
                     inquiryOwner: inq.inquiryOwner,
                     lastMessage: msg,
                     bearings:inq.bearings,
-                    quotations:inq.quotations
+                    quotations:inq.quotations,
+                    inquiryTime: inq.inquiryTime
                 }
             }
             else{
@@ -390,15 +422,29 @@ socket.on("connection",(client)=>{
                     inquiryID:inq.inquiryID,
                     inquiryOwner: inq.inquiryOwner,
                     lastMessage: msg,
-                    bearings:inq.bearings
+                    bearings:inq.bearings,
+                    inquiryTime: inq.inquiryTime
+
                 }
             }
 
 
 
             var update = {};
+            var update1 = {};
+
+/**************************************************************************************/
+
             update['/inquiries/'+ inq.inquiryID] = data;
-            // database.ref().update(update);
+            database.ref().update(update);
+
+
+
+            update1['/adinquiries/'+inq.inquiryOwner +'/'+inq.inquiryID] = data;
+            database.ref().update(update1);
+
+/**************************************************************************************/
+
         }
 
 
@@ -424,7 +470,8 @@ socket.on("connection",(client)=>{
                     inquiryOwner: inq.inquiryOwner,
                     lastMessage: msg,
                     bearings:inq.bearings,
-                    quotations:inq.quotations
+                    quotations:inq.quotations,
+                    inquiryTime: inq.inquiryTime
                 }
             }
             else{
@@ -434,15 +481,22 @@ socket.on("connection",(client)=>{
                     inquiryID:inq.inquiryID,
                     inquiryOwner: inq.inquiryOwner,
                     lastMessage: msg,
-                    bearings:inq.bearings
+                    bearings:inq.bearings,
+                    inquiryTime: inq.inquiryTime
                 }
             }
 
 
 
             var update = {};
+            var update1 = {};
+/**************************************************************************************/
             update['/inquiries/'+ inq.inquiryID] = data;
             database.ref().update(update);
+
+            update1['/adinquiries/'+inq.inquiryOwner +'/'+inq.inquiryID] = data;
+            database.ref().update(update1);
+/**************************************************************************************/
         }
 
     });
@@ -530,7 +584,8 @@ socket.on("connection",(client)=>{
                     inquiryOwner: inq.inquiryOwner,
                     lastMessage: inq.lastMessage,
                     bearings: inq.bearings,
-                    quotations: c
+                    quotations: c,
+                    inquiryTime: inq.inquiryTime
                 }
 
             }
@@ -545,15 +600,24 @@ socket.on("connection",(client)=>{
                     inquiryOwner: inq.inquiryOwner,
                     lastMessage: inq.lastMessage,
                     bearings: inq.bearings,
-                    quotations: temp
+                    quotations: temp,
+                    inquiryTime: inq.inquiryTime
                 }
             }
 
 
 
             var update = {};
+            var update1 = {};
+
+/**************************************************************************************/
             update['/inquiries/'+ inq.inquiryID] = data;
             database.ref().update(update);
+
+            update1['/adinquiries/'+inq.inquiryOwner +'/'+inq.inquiryID] = data;
+            database.ref().update(update1);
+
+/**************************************************************************************/
         }
         else{
 
@@ -567,7 +631,8 @@ socket.on("connection",(client)=>{
                     inquiryID:inq.inquiryID,
                     inquiryOwner: inq.inquiryOwner,
                     bearings: inq.bearings,
-                    quotations: c
+                    quotations: c,
+                    inquiryTime: inq.inquiryTime
                 }
 
             }
@@ -581,14 +646,22 @@ socket.on("connection",(client)=>{
                     inquiryID:inq.inquiryID,
                     inquiryOwner: inq.inquiryOwner,
                     bearings: inq.bearings,
-                    quotations: temp
+                    quotations: temp,
+                    inquiryTime: inq.inquiryTime
                 }
             }
 
 
             var update = {};
+            var update1 = {};
+
+/**************************************************************************************/
             update['/inquiries/'+ inq.inquiryID] = data;
             database.ref().update(update);
+
+            update1['/adinquiries/'+inq.inquiryOwner +'/'+inq.inquiryID] = data;
+            database.ref().update(update1);
+/**************************************************************************************/
         }
 
 

@@ -69,7 +69,7 @@ app.controller("loginCtrl",($scope,$state)=>{
 });
 
 
-app.controller("historyCtrl",($scope,inqService)=>{
+app.controller("historyCtrl",($scope,inqService,userService)=>{
 
     $scope.orderByField = 'time';
     $scope.reverseSort = false;
@@ -80,6 +80,18 @@ app.controller("historyCtrl",($scope,inqService)=>{
         $scope.getInq();
     });
 
+    $scope.$watch(function() {
+        return userService.getUsers();
+    }, function() {
+        $scope.updateUsers();
+    });
+
+    $scope.users = {};
+
+
+    $scope.updateUsers = ()=>{
+        $scope.users = userService.getUsers();
+    };
 
 
     $scope.openInq = (ID)=>{
@@ -106,7 +118,7 @@ app.controller("historyCtrl",($scope,inqService)=>{
                             // console.log(new Date($scope.allInq[k].quotations[i].payment.paymentDate));
                             $scope.toAdd.inquiryID = $scope.allInq[k].inquiryID;
                             $scope.toAdd.inquiryName = $scope.allInq[k].inquiryName;
-                            $scope.toAdd.customer = $scope.allInq[k].inquiryOwner;
+                            $scope.toAdd.customer = $scope.users[$scope.allInq[k].inquiryOwner].name;
                             $scope.toAdd.quote = $scope.allInq[k].quotations[i];
                             $scope.toAdd.quoteNumber = i + 1;
 
@@ -123,7 +135,7 @@ app.controller("historyCtrl",($scope,inqService)=>{
 
 });
 
-app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqService)=>{
+app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqService,userService)=>{
     socket.emit("getUser");
 
     $scope.view = ()=>{
@@ -194,6 +206,16 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
 
     });
 
+    socket.on("updateUserList",(userList)=>{
+        // $scope.allInquiryList = inquiryList;
+        // console.log(userList);
+
+        userService.addUsers(userList);
+        $scope.$apply();
+
+        // console.log('updating inqs');
+    });
+
     socket.on("updateInquiryList",(inquiryList)=>{
         $scope.allInquiryList = inquiryList;
 
@@ -224,7 +246,7 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
         return inqService.getInq();
     }, function(newContacts) {
         // Do something with newContacts.
-        console.log('aaaa');
+        // console.log('aaaa');
         $scope.getInq();
     });
 
@@ -411,11 +433,6 @@ app.filter('orderObjectBy', function() {
   };
 });
 
-
-
-
-
-
 app.config(function($stateProvider,$urlRouterProvider) {
 //  $urlRouterProvider.otherwise('/home');
 $urlRouterProvider.otherwise('home/inbox');
@@ -468,30 +485,10 @@ $urlRouterProvider.otherwise('home/inbox');
 app.service('inqService', function() {
     var inqList = [];
 
-    // var observerCallbacks = [];
-    //
-    // //register an observer
-    // this.registerObserverCallback = function(callback){
-    //     observerCallbacks.push(callback);
-    // };
-    //
-    // //call this when you know 'foo' has been changed
-    // var notifyObservers = function(){
-    //     angular.forEach(observerCallbacks, function(callback){
-    //       callback();
-    //     });
-    // };
-    //
-    // //example of when you may want to notify observers
-    // this.foo = someNgResource.query().$then(function(){
-    //     notifyObservers();
-    // });
-
-
-
     var addInq = function(newObj) {
     //   inqList.push(newObj);
         inqList = newObj;
+        // console.log(inqList);
     };
 
     var getInq = function(){
@@ -501,6 +498,25 @@ app.service('inqService', function() {
     return {
         addInq: addInq,
         getInq: getInq
+    };
+
+});
+
+app.service('userService', function() {
+    var userList = [];
+
+    var addUsers = function(newObj) {
+    //   inqList.push(newObj);
+        userList = newObj;
+    };
+
+    var getUsers = function(){
+      return userList;
+    };
+
+    return {
+        addUsers: addUsers,
+        getUsers: getUsers
     };
 
 });
