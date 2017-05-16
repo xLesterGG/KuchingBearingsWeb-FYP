@@ -45,31 +45,11 @@ app.use('/js',express.static(__dirname + '/node_modules/imageviewer/dist'));
 app.use('/css',express.static(__dirname + '/node_modules/imageviewer/dist'));
 
 
-
-
-// app.use('/js',express.static(__dirname+'/node_modules/firebase/'));
-
-
-// app.get('/',(req,res)=>{
-//     // res.send('hello');
-//     res.sendFile(__dirname +'/index.html');
-// });
-
-// app.get('/',(req,res)=>{
-//     // res.send('hello');
-//     res.sendFile(__dirname +'/home.html');
-// });
-
 app.get('/',(req,res)=>{
     // res.send('hello');
     res.sendFile(__dirname +'/index1.html');
 });
 
-
-// app.get('/login',(req,res)=>{
-//     // res.send('hello');
-//     res.sendFile(__dirname +'/login.html');
-// });
 
 
 server.listen(80,"localhost");

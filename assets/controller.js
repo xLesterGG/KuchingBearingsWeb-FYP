@@ -68,7 +68,6 @@ app.controller("loginCtrl",($scope,$state)=>{
 
 });
 
-
 app.controller("historyCtrl",($scope,inqService,userService)=>{
 
     $scope.orderByField = 'time';
@@ -108,7 +107,7 @@ app.controller("historyCtrl",($scope,inqService,userService)=>{
 
             for(k in $scope.allInq){
 
-                if($scope.allInq[k].quotations != undefined){
+                if($scope.allInq[k].quotations != undefined && $scope.users[$scope.allInq[k].inquiryOwner]!=undefined){
                     for(var i =0; i< $scope.allInq[k].quotations.length; i++){
                         if($scope.allInq[k].quotations[i].payment!=undefined)
                         {
@@ -119,6 +118,7 @@ app.controller("historyCtrl",($scope,inqService,userService)=>{
                             $scope.toAdd.inquiryID = $scope.allInq[k].inquiryID;
                             $scope.toAdd.inquiryName = $scope.allInq[k].inquiryName;
                             $scope.toAdd.customer = $scope.users[$scope.allInq[k].inquiryOwner].name;
+                            $scope.toAdd.customerID = $scope.allInq[k].inquiryOwner;
                             $scope.toAdd.quote = $scope.allInq[k].quotations[i];
                             $scope.toAdd.quoteNumber = i + 1;
 
@@ -187,19 +187,31 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
             scrollTop: $('#convo')[0].scrollHeight}, 0);
         });
 
+        // console.log(message);
+
         if(message.messageUser!= 'admin'){
             if (Notification.permission !== "granted")
                 Notification.requestPermission();
             else {
                 var notification = new Notification($scope.notificationtitle, {
-                    icon: 'http://cdn.sstatic.net/stackexchange/img/logos/so/so-icon.png',
+                    icon: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd0XHy-MpwWSHpn4RbwC8dKSWeabXTe3jf6uIZGldY26367BPL',
                     body: message.messageText,
                 });
 
-                notification.onclick = function () {
-                    window.open("http://localhost/#!/home/inbox/chat/"+msg.inquiryID.trim());
-                    window.open("http://localhost/#!/home/inbox/chat/"+ID);
-                };
+                if(message.messageType== "payment"){
+                    notification.onclick = function () {
+                        window.open("http://localhost/#!/home/history");
+                        // window.open("http://localhost/#!/home/inbox/chat/"+ID);
+                    };
+                }else{
+                    notification.onclick = function () {
+                        window.open("http://localhost/#!/home/inbox/chat/"+msg.inquiryID.trim());
+                        // window.open("http://localhost/#!/home/inbox/chat/"+ID);
+                    };
+                }
+
+
+
 
             }
         }
@@ -233,7 +245,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
 
 });
 
-app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
+app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService,userService)=>{
 
     $scope.chatID = $stateParams.id; //get chat id
     $scope.messages = messageService.getMessage(); //get messages
@@ -241,6 +253,20 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
     $scope.all = {};
 
     // $scope.allInq = inqService.getInq();
+
+    $scope.$watch(function() {
+        return userService.getUsers();
+    }, function() {
+        $scope.updateUsers();
+    });
+
+    $scope.users = {};
+
+
+    $scope.updateUsers = ()=>{
+        $scope.users = userService.getUsers();
+    };
+
 
     $scope.$watch(function() {
         return inqService.getInq();
@@ -296,7 +322,10 @@ app.controller("chatBoxCtrl",($scope,$stateParams,messageService,inqService)=>{
             for(var i=0;i<$scope.currentInq['bearings'].length;i++ ){
                 $scope.bearing1.push($scope.currentInq['bearings'][i].serialNo);
             }
+            $scope.currentUser = $scope.users[$scope.currentInq.inquiryOwner];
+
         }
+
 
 
 
@@ -412,6 +441,20 @@ app.filter('customFilter', function(){
         var filtered = [];
         angular.forEach(items, function(item){
             if (item.inquiryID === id){
+                filtered.push(item);
+            }
+        });
+        return filtered;
+    };
+});
+
+app.filter('inqFilter', function(){
+    return function (items,id) {
+        var filtered = [];
+        angular.forEach(items, function(item){
+            // console.log(id);
+            // console.log(item.inquiryOwner.length);
+            if (item.inquiryOwner === id){
                 filtered.push(item);
             }
         });
