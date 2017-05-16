@@ -301,8 +301,7 @@ socket.on("connection",(client)=>{
                         messageUser : msg.sender,
                         messageRead: false,
                         messageID:uid,
-                        inquiryOwner:inqOwner,
-                        inquiryTime: inq.inquiryTime
+                        inquiryOwner:inqOwner
                     });
 
                     // console.log(a.key);
@@ -313,8 +312,7 @@ socket.on("connection",(client)=>{
                         messageUser : msg.sender,
                         messageRead: false,
                         messageID:uid,
-                        inquiryOwner:inqOwner,
-                        inquiryTime: inq.inquiryTime
+                        inquiryOwner:inqOwner
                     });
 
 /**************************************************************************************/
