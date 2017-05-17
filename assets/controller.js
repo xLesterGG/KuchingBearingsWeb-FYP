@@ -63,7 +63,10 @@ app.controller("loginCtrl",($scope,$state)=>{
     });
 
     socket.on("redirectToLogin",(user)=>{
-        $state.go('login');
+        // $state.go('login');
+
+        // window.location = "http://localhost/#!/login";
+        // window.location.reload();
     });
 
 });
@@ -147,7 +150,9 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
     socket.on("redirectToLogin1",()=>{
 
         // $state.go('login');
-        // window.location = "http://localhost/#!/home/inbox";
+
+        window.location = "http://localhost/#!/login";
+        window.location.reload();
     });
 
     $scope.logout = ()=>{
@@ -174,6 +179,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
 
     socket.on("recieveMessage",(msg)=>{
         console.log('recieving message');
+        console.log(msg);
         var message = {};
         var message = msg;
 
@@ -210,9 +216,6 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
                     };
                 }
 
-
-
-
             }
         }
 
@@ -225,7 +228,6 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
         userService.addUsers(userList);
         $scope.$apply();
 
-        // console.log('updating inqs');
     });
 
     socket.on("updateInquiryList",(inquiryList)=>{

@@ -67,24 +67,33 @@ var database = firebase.database();
 var ready = false;
 var isReady = false;
 
-var a = database.ref('/inquiries'); // get changes to rooms
-var b = database.ref('/conversations');
-var c = database.ref('/conversations/'); // to receive incoming messages and update view
-var d = database.ref('/users');
+
 
 
 socket.on("connection",(client)=>{
     var currentUser;
 
+    // console.log(client.id);
+    console.log(Object.keys(socket.sockets.sockets));
+
     client.on("getUser",()=>{
         if(currentUser == undefined){
-            client.emit("redirectToLogin1");
+
+            if(Object.keys(socket.sockets.sockets).length<=1)
+            {
+                client.emit("redirectToLogin1");
+            }
         }
     });
 
 
     client.on("retrieveInfo",()=>{
         console.log('retrieving');
+
+        var a = database.ref('/inquiries'); // get changes to rooms
+        var b = database.ref('/conversations');
+        var c = database.ref('/conversations/'); // to receive incoming messages and update view
+        var d = database.ref('/users');
 
         d.on('value',(res)=>{
             for(var x in res.val()){
@@ -145,8 +154,10 @@ socket.on("connection",(client)=>{
                         // console.log('temp is');
                         // console.log(temp);
                         // console.log('key is ' + key);
-                        client.emit("recieveMessage",temp)
-                        // socket.sockets.emit("recieveMessage",temp);
+                        // client.emit("recieveMessage",temp)
+
+                        console.log(temp);
+                        socket.sockets.emit("recieveMessage",temp);
 
                     }
                 }
