@@ -32,10 +32,16 @@ var socket= io.connect("http://localhost:80");
 app.controller("loginCtrl",($scope,$state)=>{
 
     $scope.showlogin = true;
+    $scope.showsignup = false;
 
-    $scope.register = (email,pass)=>{
+    $scope.register = (email,pass,code)=>{
         console.log(email + pass);
-        socket.emit("registerUser",email,pass);
+        if(code != "123abc"){
+            alert("Invalid Registration key");
+        }else{
+            console.log("Signup");
+            socket.emit("registerUser",email,pass);    
+        }
     };
 
     $scope.resetPassword = (email)=>{
@@ -52,6 +58,11 @@ app.controller("loginCtrl",($scope,$state)=>{
         socket.emit("loginUser",email,pass);
     };
 
+    socket.on("registersuccess",()=>{
+        location.reload();
+        alert("Registered successfully!");
+    });
+    
     socket.on("resetSuccessful",(mess)=>{
         alert(mess);
         location.reload();
@@ -63,7 +74,10 @@ app.controller("loginCtrl",($scope,$state)=>{
     });
 
     socket.on("redirectToLogin",(user)=>{
-        $state.go('login');
+        // $state.go('login');
+
+        // window.location = "http://localhost/#!/login";
+        // window.location.reload();
     });
 
 });
@@ -146,8 +160,12 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
 
     socket.on("redirectToLogin1",()=>{
 
+
         //$state.go('login');
         // window.location = "http://localhost/#!/home/inbox";
+
+        window.location = "http://localhost/#!/login";
+        window.location.reload();
     });
 
     $scope.logout = ()=>{
@@ -174,6 +192,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
 
     socket.on("recieveMessage",(msg)=>{
         console.log('recieving message');
+        console.log(msg);
         var message = {};
         var message = msg;
 
@@ -210,9 +229,6 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
                     };
                 }
 
-
-
-
             }
         }
 
@@ -225,7 +241,6 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
         userService.addUsers(userList);
         $scope.$apply();
 
-        // console.log('updating inqs');
     });
 
     socket.on("updateInquiryList",(inquiryList)=>{
