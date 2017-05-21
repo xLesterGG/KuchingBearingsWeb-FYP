@@ -14,7 +14,6 @@ app.config(function($mdThemingProvider,$mdIconProvider) {
     .primaryPalette('blue')
     .accentPalette('pink');
 
-
 });
 
 app.run(function ($rootScope,$timeout) {
@@ -40,7 +39,7 @@ app.controller("loginCtrl",($scope,$state)=>{
             alert("Invalid Registration key");
         }else{
             console.log("Signup");
-            socket.emit("registerUser",email,pass);    
+            socket.emit("registerUser",email,pass);
         }
     };
 
@@ -62,7 +61,7 @@ app.controller("loginCtrl",($scope,$state)=>{
         location.reload();
         alert("Registered successfully!");
     });
-    
+
     socket.on("resetSuccessful",(mess)=>{
         alert(mess);
         location.reload();
@@ -484,7 +483,7 @@ app.filter('orderObjectBy', function() {
       filtered.push(item);
     });
     filtered.sort(function (a, b) {
-      return (a[field] > b[field] ? 1 : -1);
+      return (a.lastMessage.messageTime > b.lastMessage.messageTime ? 1 : -1);
     });
     if(reverse) filtered.reverse();
     return filtered;
