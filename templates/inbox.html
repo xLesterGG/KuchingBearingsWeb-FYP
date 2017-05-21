@@ -9,7 +9,7 @@
                     <img src="http://img.clipartall.com/user-image-user-clipart-276_298.png" alt="" />
                     <!-- <span class="name"> Conversation name is    {{inq.inquiryName}}</span> -->
                     <span class="name">{{inq.inquiryName}}</span>
-                    <span class="time">{{inq.lastMessage.messageTime  }}</span>
+                    <span class="time">{{inq.lastMessage.messageTime | date: 'hh:mm a' }}</span>
 
                     <div data-ng-show="(inq.lastMessage.messageRead==false) && (inq.lastMessage.messageUser!='admin')">
                         <span class="preview">
