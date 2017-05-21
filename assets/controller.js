@@ -483,7 +483,10 @@ app.filter('orderObjectBy', function() {
       filtered.push(item);
     });
     filtered.sort(function (a, b) {
-      return (a.lastMessage.messageTime > b.lastMessage.messageTime ? 1 : -1);
+        if(a!=undefined && b!=undefined)
+        {
+            return (a.lastMessage.messageTime > b.lastMessage.messageTime ? 1 : -1);
+        }
     });
     if(reverse) filtered.reverse();
     return filtered;
