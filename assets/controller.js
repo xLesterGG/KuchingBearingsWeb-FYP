@@ -26,7 +26,9 @@ app.run(function ($rootScope,$timeout) {
 
 
 
-var socket= io.connect("http://protected-sierra-93361.herokuapp.com:3000");
+var socket= io.connect("http://protected-sierra-93361.herokuapp.com");
+// var socket= io.connect("http://localhost:3000");
+
 
 app.controller("loginCtrl",($scope,$state)=>{
 
