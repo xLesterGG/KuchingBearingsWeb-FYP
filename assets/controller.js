@@ -26,7 +26,7 @@ app.run(function ($rootScope,$timeout) {
 
 
 
-var socket= io.connect("http://localhost:80");
+var socket= io.connect("http://localhost:443");
 
 app.controller("loginCtrl",($scope,$state)=>{
 
@@ -163,7 +163,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
         //$state.go('login');
         // window.location = "http://localhost/#!/home/inbox";
 
-        window.location = "http://localhost/#!/login";
+        window.location = "http://localhost:443/#!/login";
         window.location.reload();
     });
 
