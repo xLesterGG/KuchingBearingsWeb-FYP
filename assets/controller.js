@@ -162,10 +162,10 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
     socket.on("redirectToLogin1",()=>{
 
 
-        //$state.go('login');
+        $state.go('login');
         // window.location = "http://localhost/#!/home/inbox";
 
-        window.location = "http://localhost:3000/#!/login";
+        // window.location = "http://localhost:3000/#!/login";
         window.location.reload();
     });
 
