@@ -81,10 +81,10 @@ socket.on("connection",(client)=>{
     client.on("getUser",()=>{
         if(currentUser == undefined){
 
-            if(Object.keys(socket.sockets.sockets).length<=1)
-            {
+            // if(Object.keys(socket.sockets.sockets).length<=1)
+            // {
                 client.emit("redirectToLogin1");
-            }
+            // }
         }
     });
 
