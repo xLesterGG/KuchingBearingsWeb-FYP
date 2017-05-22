@@ -52,7 +52,7 @@ app.get('/',(req,res)=>{
 
 
 
-server.listen(443,"localhost");
+server.listen(3000,"localhost");
 var socket = io.listen(server);
 var people = {};
 var inquiries = {};
