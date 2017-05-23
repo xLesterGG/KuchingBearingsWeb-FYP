@@ -83,7 +83,7 @@ socket.on("connection",(client)=>{
 
             // if(Object.keys(socket.sockets.sockets).length<=1)
             // {
-                client.emit("redirectToLogin1");
+//                client.emit("redirectToLogin1");
             // }
         }
     });

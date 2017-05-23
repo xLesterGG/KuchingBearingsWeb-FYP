@@ -220,12 +220,12 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
 
                 if(message.messageType== "payment"){
                     notification.onclick = function () {
-                        window.open("http://localhost/#!/home/history");
+                        window.open("http://protected-sierra-93361.herokuapp.com/#!/home/history");
                         // window.open("http://localhost/#!/home/inbox/chat/"+ID);
                     };
                 }else{
                     notification.onclick = function () {
-                        window.open("http://localhost/#!/home/inbox/chat/"+msg.inquiryID.trim());
+                        window.open("http://protected-sierra-93361.herokuapp.com/#!/home/inbox/chat/"+msg.inquiryID.trim());
                         // window.open("http://localhost/#!/home/inbox/chat/"+ID);
                     };
                 }
