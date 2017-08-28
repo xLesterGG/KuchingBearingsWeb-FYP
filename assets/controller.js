@@ -1,5 +1,7 @@
-var app = angular.module("myApp",['ui.router','ngMaterial']);
-document.addEventListener('DOMContentLoaded', function () {
+var app = angular.module("myApp",['ui.router','ngMaterial','ngCookies']);
+
+
+document.addEventListener('DOMContentLoaded', function () { // for notifications
     if (!Notification) {
         alert('Desktop notifications not available in your browser. Try Chrome.');
         return;
@@ -13,24 +15,27 @@ app.config(function($mdThemingProvider,$mdIconProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('blue')
     .accentPalette('pink');
-
 });
 
 app.run(function ($rootScope,$timeout) {
-        $rootScope.$on('$viewContentLoaded', ()=> {
-          $timeout(() => {
-            componentHandler.upgradeAllRegistered();
-          })
-        })
-    }); // register mdl elemenets
+    $rootScope.$on('$viewContentLoaded', ()=> {
+      $timeout(() => {
+        componentHandler.upgradeAllRegistered();
+      })
+    })
+}); // register mdl elemenets
 
 
+// var socket= io.connect("http://protected-sierra-93361.herokuapp.com");
+var socket= io.connect("http://localhost:3000");
 
-var socket= io.connect("http://protected-sierra-93361.herokuapp.com");
-// var socket= io.connect("http://localhost:3000");
 
+app.controller("loginCtrl",($scope,$state,$cookieStore)=>{
 
-app.controller("loginCtrl",($scope,$state)=>{
+    if($cookieStore.get('kbLogged'))
+    {
+        $state.go('home.inbox');
+    }
 
     $scope.showlogin = true;
     $scope.showsignup = false;
@@ -49,9 +54,11 @@ app.controller("loginCtrl",($scope,$state)=>{
         socket.emit("resetPassword",email);
     };
 
-    socket.on("errorMsg",(err)=>{
-        alert(err);
-    });
+    // socket.on("errorMsg",(err)=>{
+    //     alert(err);
+    // });
+
+
 
 
     $scope.login = (email,pass)=>{
@@ -67,15 +74,19 @@ app.controller("loginCtrl",($scope,$state)=>{
     socket.on("resetSuccessful",(mess)=>{
         alert(mess);
         location.reload();
-
     });
 
     socket.on("redirectToInbox",(user)=>{
         $state.go('home.inbox');
+
+        $cookieStore.put('kbLogged',true);
+        // $cookieStore.put('myFavorite',"emily")
+        // $cookieStore.remove('myFavorite');
+        // console.log($cookieStore.get('myFavorite'));
     });
 
     socket.on("redirectToLogin",(user)=>{
-        // $state.go('login');
+        $state.go('login');
 
         // window.location = "http://localhost/#!/login";
         // window.location.reload();
@@ -149,8 +160,15 @@ app.controller("historyCtrl",($scope,inqService,userService)=>{
 
 });
 
-app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqService,userService)=>{
-    socket.emit("getUser");
+app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqService,userService,$cookieStore)=>{
+
+    if($cookieStore.get('kbLogged'))
+    {
+        $state.go('home.inbox');
+    }else{
+        socket.emit("getUser");
+    }
+
 
     $scope.view = ()=>{
         $('.image').viewer();
@@ -169,6 +187,7 @@ app.controller("chatCtrl",($scope, $stateParams, messageService,$state,inqServic
     });
 
     $scope.logout = ()=>{
+        $cookieStore.remove('kbLogged');
         socket.emit("logoutUser");
     };
 

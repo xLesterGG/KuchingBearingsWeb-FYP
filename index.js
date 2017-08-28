@@ -1,4 +1,4 @@
- var fs = require('fs');
+ // var fs = require('fs');
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -13,8 +13,6 @@ var config = {
     storageBucket: "kuchingbearings.appspot.com",
     messagingSenderId: "1033971329142"
   };
-
-
 
 
 
@@ -44,6 +42,8 @@ app.use('/js',express.static(__dirname + '/node_modules/angular-aria/'));
 app.use('/js',express.static(__dirname + '/node_modules/imageviewer/dist'));
 app.use('/css',express.static(__dirname + '/node_modules/imageviewer/dist'));
 
+app.use('/js',express.static(__dirname+ '/node_modules/angular-cookies/'));
+
 
 app.get('/',(req,res)=>{
     // res.send('hello');
@@ -56,7 +56,7 @@ app.get('/',(req,res)=>{
 server.listen(process.env.PORT || 3000);
 
 var socket = io.listen(server);
-var people = {};
+// var people = {};
 var inquiries = {};
 var conversations = {};
 var users = {};
@@ -80,10 +80,10 @@ socket.on("connection",(client)=>{
 
     client.on("getUser",()=>{
         if(currentUser == undefined){
-
+            console.log("no user")
             // if(Object.keys(socket.sockets.sockets).length<=1)
             // {
-//                client.emit("redirectToLogin1");
+               client.emit("redirectToLogin1");
             // }
         }
     });
